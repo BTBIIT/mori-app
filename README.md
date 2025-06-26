@@ -4,7 +4,8 @@
 React + Tailwind + Supabase + OpenAI 기반으로 개발되었으며, 설치형 웹앱(PWA)으로도 작동함.
 
 👉 자세한 개발 일지는 아래에서 확인할 수 있음.  
-🔗 [Mori 개발 일지 1일차](https://code-palette.tistory.com/29)
+🔗 [Mori 개발 일지 1일차](https://code-palette.tistory.com/29)  
+🔗 [Mori 개발 일지 2일차](https://code-palette.tistory.com/30)
 
 ---
 
@@ -24,8 +25,11 @@ React + Tailwind + Supabase + OpenAI 기반으로 개발되었으며, 설치형 
 src/
 ├── assets/                  # 이미지, 로고 등 정적 파일
 ├── components/              # 재사용 가능한 UI 요소
+├────────────── LoginButton.jsx # LoginButton 구현
+├────────────── LogoutButton.jsx # LogoutButton 구현
 ├── pages/                   # 각 화면별 구성
 ├── lib/                     # API 요청, 유틸 함수 등
+├─────── supabse.js             # supabase 관련 설정 파일
 ├── App.jsx
 ├── index.css
 ├── main.jsx
@@ -47,6 +51,7 @@ tailwind.config.js              # Tailwind CSS 설정파일
 vite.config.js                  # Vite 개발 서버 및 번들러 설정 파일
                                 # React 플러그인이나 PWA 설정 등을 여기서 구성
                                 # 개발 서버 포트나 alias 등도 설정 가능
+.env                            # 중요 API 키나 다른 설정 키들 보관하는 파일로 볼 수 없게 설정함(.gitignore에 숨김처리)
 ```
 
 ---
@@ -57,6 +62,23 @@ vite.config.js                  # Vite 개발 서버 및 번들러 설정 파일
 npm install
 npm run dev
 ```
+
+---
+
+## 🗓️ Mori 개발 일정표 (주말 제외 평일 기준)
+
+| Day    | 날짜       | 예정 내용                                  |
+| ------ | ---------- | ------------------------------------------ |
+| Day 1  | 2025-06-24 | 프로젝트 초기화, PWA 테스트, Tailwind 설치 |
+| Day 2  | 2025-06-25 | 기본 폴더 구조 정리, Favicon 및 로고 적용  |
+| Day 3  | 2025-06-26 | Supabase + Google OAuth 로그인 연동        |
+| Day 4  | 2025-06-27 | 전역 로그인 상태 관리 및 라우팅 분기       |
+| Day 5  | 2025-06-30 | 글 입력 UI 및 요약 요청 기능 구현          |
+| Day 6  | 2025-07-01 | 요약 결과 출력 화면 구현                   |
+| Day 7  | 2025-07-02 | 감정 분석 및 감정별 피드백 구성            |
+| Day 8  | 2025-07-03 | 요약 및 감정 기록 저장 기능                |
+| Day 9  | 2025-07-04 | 마이페이지 구조 구현 (내 기록, 그룹 등)    |
+| Day 10 | 2025-07-07 | PWA 앱 설치 테스트 및 배포 준비            |
 
 ---
 
