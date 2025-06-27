@@ -4,9 +4,11 @@
 React + Tailwind + Supabase + OpenAI 기반으로 개발되었으며, 설치형 웹앱(PWA)으로도 작동함.
 
 👉 자세한 개발 일지는 아래에서 확인할 수 있음.  
-🔗 [Mori 개발 일지 1일차](https://code-palette.tistory.com/29)  
+🔗 [Mori 개발 일지 1일차](https://code-palette.tistory.com/29)
+
 🔗 [Mori 개발 일지 2일차](https://code-palette.tistory.com/30)
-🔗 [Mori 개발 일지 2일차](https://code-palette.tistory.com/31)
+
+🔗 [Mori 개발 일지 3일차](https://code-palette.tistory.com/31)
 
 ---
 
