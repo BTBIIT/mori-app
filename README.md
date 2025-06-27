@@ -6,6 +6,7 @@ React + Tailwind + Supabase + OpenAI 기반으로 개발되었으며, 설치형 
 👉 자세한 개발 일지는 아래에서 확인할 수 있음.  
 🔗 [Mori 개발 일지 1일차](https://code-palette.tistory.com/29)  
 🔗 [Mori 개발 일지 2일차](https://code-palette.tistory.com/30)
+🔗 [Mori 개발 일지 2일차](https://code-palette.tistory.com/31)
 
 ---
 
@@ -23,28 +24,34 @@ React + Tailwind + Supabase + OpenAI 기반으로 개발되었으며, 설치형 
 
 ```
 src/
-├── assets/                  # 이미지, 로고 등 정적 파일
-├── components/              # 재사용 가능한 UI 요소
-├────────────── LoginButton.jsx # LoginButton 구현
-├────────────── LogoutButton.jsx # LogoutButton 구현
-├── pages/                   # 각 화면별 구성
-├── lib/                     # API 요청, 유틸 함수 등
-├─────── supabse.js             # supabase 관련 설정 파일
-├── App.jsx
-├── index.css
-├── main.jsx
+├── assets/                      # 이미지, 로고 등 정적 파일
+├── components/                 # 재사용 가능한 UI 요소
+│   ├── LoginButton.jsx         # Supabase 로그인 처리 버튼
+│   ├── LogoutButton.jsx        # Supabase 로그아웃 처리 버튼
+│   └── PrivateRoute.jsx        # 로그인 여부에 따라 접근 제한 라우터
+├── lib/                        # API 및 전역 상태 관련 설정
+│   ├── supabase.js             # Supabase 클라이언트 설정
+│   ├── useAuth.js              # 로그인 상태 커스텀 훅
+│   └── AuthContext.jsx         # 전역 로그인 Context
+├── pages/                      # 주요 페이지 구성
+│   ├── Login.jsx               # 로그인 전 화면
+│   ├── Home.jsx                # 로그인 후 메인 화면
+│   ├── MyPage.jsx              # 마이페이지 (내 기록, 그룹 등)
+│   ├── Summary.jsx             # 요약 입력 및 결과 페이지
+│   └── Chat.jsx                # 감정 피드백 및 대화 페이지
+├── App.jsx                     # 최상위 컴포넌트, Context 래핑
+├── AppRoutes.jsx               # 모든 라우팅 경로 정의
+├── index.css                   # Tailwind 전역 스타일
+├── main.jsx                    # 앱 진입점
 public/
-├── favicon.ico              # 사이트 상단의 로고
-├── logo192.png              # PWA 앱 설치 시 다운로드 될 로고
-├── logo512.png              # PWA 웹 설치 시 다운로드 될 로고
-├── manifest.webmanifest     # PWA 설정 파일
-
+├── favicon.ico                 # 브라우저 탭 아이콘
+├── logo192.png                 # PWA 아이콘
+├── logo512.png                 # 고해상도 PWA 아이콘
+├── manifest.webmanifest        # PWA 설치 및 메타 정보
 index.html                      # 앱의 시작점이 되는 HTML 파일
                                 # React 앱이 이 HTML의 <div id="root">에 렌더링됨
                                 # favicon, manifest, meta 태그도 여기서 설정
-
 package.json                    # 프로젝트의 종속성, 실행, 스크립트, 메타
-
 tailwind.config.js              # Tailwind CSS 설정파일
                                 # 어떤 폴더에서 Tailwind 클래스를 사용할지 경로 지정
                                 # 테마 색상이나 커스텀 유틸리티도 이곳에서 확장 가능
