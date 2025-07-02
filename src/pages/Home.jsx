@@ -1,10 +1,20 @@
+// 📍 src/pages/Home.jsx
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../lib/AuthContext";
 import LogoutButton from "../components/LogoutButton";
+import { ensureUserProfile } from "../lib/ensureUserProfile"; // ✅ 추가
 
 export default function Home() {
   const { user } = useAuthContext();
 
+  // ✅ user가 로그인되어 있을 때, user_profiles에 등록 시도
+  useEffect(() => {
+    if (user) {
+      ensureUserProfile();
+    }
+  }, [user]);
+  console.log("👉 내 user_id:", user?.id);
   return (
     <div className="p-8">
       <h2 className="text-xl font-bold mb-4">홈 페이지</h2>

@@ -1,16 +1,10 @@
 # 🌴 Mori
 
-**Mori**는 사용자의 하루 일과를 자연어로 요약하고 감정을 분석해주는 감성 기반 AI 다이어리 앱 개발중임.  
-React + Tailwind + Supabase + OpenAI 기반으로 개발되었으며, 설치형 웹앱(PWA)으로도 작동함.
+**Mori**는 사용자의 하루 일과를 자연어로 요약하고 감정을 분석해주는 감성 기반 AI 다이어리 앱입니다.  
+React + Tailwind + Supabase + OpenAI 기반으로 개발되었으며, 설치형 웹앱(PWA)으로도 작동합니다.
 
-👉 자세한 개발 일지는 아래에서 확인할 수 있음.  
-🔗 [Mori 개발 일지 1일차](https://code-palette.tistory.com/29)
-
-🔗 [Mori 개발 일지 2일차](https://code-palette.tistory.com/30)
-
-🔗 [Mori 개발 일지 3일차](https://code-palette.tistory.com/31)
-
-🔗 [Mori 개발 일지 4일차](https://code-palette.tistory.com/32)
+👉 자세한 개발 일지는 아래에서 확인할 수 있습니다.  
+🔗 [Mori 개발 일지 1~7일차](https://code-palette.tistory.com/33)
 
 ---
 
@@ -24,69 +18,49 @@ React + Tailwind + Supabase + OpenAI 기반으로 개발되었으며, 설치형 
 
 ---
 
-## 📂 폴더 구조 요약
+## 📁 폴더 및 파일 구조 (전체 + 상세 주석)
 
 ```
 src/
-├── assets/                      # 이미지, 로고 등 정적 파일
-│   └── (ex: app-icon.png)       # PWA 아이콘 및 기타 이미지 배치
+├── assets/                            # 앱 아이콘, 이미지 등 정적 파일 보관
+│   └── logo192.png
+│   └── logo512.png
+│   └── app-icon.png
 │
-├── components/                  # 재사용 가능한 UI 요소
-│   ├── LoginButton.jsx          # ✅ Supabase 로그인 버튼 컴포넌트
-│   ├── LogoutButton.jsx         # ✅ Supabase 로그아웃 버튼 컴포넌트
-│   └── PrivateRoute.jsx         # ✅ 로그인 여부에 따라 접근 제한 라우터
-│                                # 로그인되지 않으면 /login으로 리디렉션
+├── components/                        # 공통 UI 컴포넌트 모음
+│   ├── LoginButton.jsx               # Supabase Google 로그인 버튼
+│   ├── LogoutButton.jsx              # Supabase 로그아웃 버튼
+│   └── PrivateRoute.jsx              # 로그인 여부에 따라 페이지 접근 제어
 │
-├── lib/                         # API, 전역 상태 관리, 헬퍼 유틸
-│   ├── supabase.js              # ✅ Supabase 인스턴스 초기화
-│   ├── useAuth.js               # ✅ 로그인 상태 커스텀 훅
-│   ├── AuthContext.jsx          # ✅ 로그인 상태를 Context로 관리
-│   └── openai.js                # 🆕 OpenAI 요약 요청 함수 정의
-│                                # - summarizeWithGPT(inputText)
-│                                # - system 프롬프트와 함께 API 호출
-│                                # - 디버깅용 콘솔 로그 포함
+├── lib/                               # API 호출, 상태관리, 헬퍼 모듈
+│   ├── AuthContext.jsx               # 전역 로그인 상태 Context
+│   ├── openai.js                     # OpenAI 요약 호출 함수
+│   ├── summaryApi.js                 # 요약 결과 DB 저장 함수
+│   ├── supabase.js                   # Supabase 인스턴스 생성 및 설정
+│   └── useAuth.js                    # 로그인 상태를 추적하는 커스텀 훅
 │
-├── pages/                       # 각 라우팅 페이지 화면
-│   ├── Login.jsx                # ✅ 로그인 안내 및 버튼 출력 화면
-│   ├── Home.jsx                 # ✅ 로그인 후 진입하는 기본 메인 화면
-│   ├── MyPage.jsx               # 🆗 마이페이지 (내 기록, 그룹 등)
-│   ├── Summary.jsx              # 🆕 일기 입력 및 요약 결과 출력 페이지
-│                                # - textarea 입력 및 "요약하기" 버튼
-│                                # - summarizeWithGPT 호출, 결과 표시
-│   └── Chat.jsx                 # 🆗 감정 피드백 및 대화 기반 페이지
+├── pages/                             # 라우트에 연결되는 주요 화면
+│   ├── Chat.jsx                      # 감정 기반 대화/피드백 페이지
+│   ├── Home.jsx                      # 메인 홈 화면 (로그인 후)
+│   ├── Login.jsx                     # 로그인 안내 및 버튼 출력
+│   ├── MyPage.jsx                    # 마이페이지 (내 기록, 그룹 등)
+│   └── Summary.jsx                   # 요약 기능 및 결과 출력 페이지
 │
-├── App.jsx                      # ✅ 최상위 컴포넌트
-│                                # - <AuthProvider>로 로그인 상태 래핑
-│                                # - <AppRoutes />로 라우팅 구성
-│
-├── AppRoutes.jsx                # ✅ 전체 라우팅 경로 정의
-│                                # - react-router-dom 기반
-│                                # - PrivateRoute로 보호된 페이지 분기
-│
-├── index.css                    # ✅ Tailwind CSS 설정 및 전역 스타일
-│
-├── main.jsx                     # ✅ React 앱 엔트리 포인트
-│                                # - App.jsx를 <div id="root">에 마운트
+├── App.jsx                            # 앱의 루트 컴포넌트 (라우팅 및 AuthProvider 포함)
+├── AppRoutes.jsx                      # 전체 라우팅 정의 (PrivateRoute 포함)
+├── index.css                          # Tailwind 및 전역 스타일 정의
+├── main.jsx                           # React 앱 진입점
 │
 public/
-├── favicon.ico                 # ✅ 브라우저 탭 아이콘
-├── logo192.png                 # ✅ PWA 설치 시 아이콘
-├── logo512.png                 # ✅ 고해상도 설치용 아이콘
-├── manifest.webmanifest        # ✅ PWA 설치를 위한 설정
-│                                # - 앱 이름, 아이콘, 시작 URL 등 포함
+├── favicon.ico                        # 브라우저 탭 아이콘
+├── logo192.png / logo512.png          # PWA 설치용 아이콘
+├── manifest.webmanifest               # PWA 메타정보 설정
 │
-index.html                      # ✅ 앱 진입점 HTML 파일
-                                # - <div id="root">에 React 앱 마운트
-                                # - favicon, manifest, meta 태그 포함
-
-.env                            # ✅ OpenAI API 키 포함 (VITE_OPENAI_API_KEY=...)
-                                # - .gitignore에 포함하여 외부 공개 방지
-
-package.json                    # ✅ 종속성, 스크립트 정의
-                                # - "react", "vite", "tailwind", "react-router-dom", 등 포함
-
-tailwind.config.js              # ✅ Tailwind CSS 설정 파일
-vite.config.js                  # ✅ Vite 번들링 및 설정 파일
+.env                                   # 환경 변수 파일 (OpenAI API 키 등)
+.gitignore                             # Git 제외 파일 설정 (.env 포함)
+package.json                           # 종속성 및 npm 스크립트
+tailwind.config.js                     # Tailwind 설정 파일
+vite.config.js                         # Vite 번들링 및 서버 설정
 ```
 
 ---
@@ -102,19 +76,19 @@ npm run dev
 
 ## 📆 Mori 개발 일정표 (최신 반영)
 
-| Day    | 날짜       | 실제 진행일 | 내용                                         |
-| ------ | ---------- | ----------- | -------------------------------------------- |
-| Day 1  | 2025-06-24 | 2025-06-24  | 프로젝트 초기화, PWA 테스트, Tailwind 설치   |
-| Day 2  | 2025-06-25 | 2025-06-24  | 기본 폴더 구조 정리, Favicon 및 로고 적용    |
-| Day 3  | 2025-06-26 | 2025-06-26  | Supabase + Google OAuth 로그인 연동          |
-| Day 4  | 2025-06-27 | 2025-06-27  | 전역 로그인 상태 관리 및 라우팅 분기 처리    |
-| Day 5  | 2025-06-30 | 일정 없음   |                                              |
-| Day 6  | 2025-07-01 | 2025-07-01  | 요약 결과 출력 + OpenAI API 연동 + 보안 점검 |
-| Day 7  | 2025-07-02 | 예정        | 감정 분석 및 감정별 피드백 구성              |
-| Day 8  | 2025-07-03 | 예정        | 요약 및 감정 기록 저장 기능                  |
-| Day 9  | 2025-07-04 | 예정        | 마이페이지 구조 구현 (내 기록, 그룹 등)      |
-| Day 10 | 2025-07-07 | 예정        | PWA 앱 설치 테스트 및 배포 준비              |
+| Day    | 날짜      | 주요 작업 내용                                                                                                                                                                 | 상태    |
+| ------ | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------- |
+| Day 1  | 6/24 (화) | - Vite + React 프로젝트 생성<br>- Tailwind 설치<br>- 폴더 구조 정리<br>- PWA 설정                                                                                              | ✅ 완료 |
+| Day 2  | 6/25 (수) | - Supabase 연동<br>- Google 로그인 구현<br>- Favicon & 로고 적용                                                                                                               | ✅ 완료 |
+| Day 3  | 6/26 (목) | - 전역 로그인 상태 관리<br>- 라우팅 분기 처리 (PrivateRoute, useAuth)                                                                                                          | ✅ 완료 |
+| Day 4  | 6/27 (금) | - 기본 레이아웃 구성<br>- 로그인/기록 페이지 구성<br>- 라우팅 및 auth 테스트                                                                                                   | ✅ 완료 |
+| Day 5  | 6/30 (월) | - 일정 없음 (주말 대체 휴식)                                                                                                                                                   | ✅ 완료 |
+| Day 6  | 7/1 (화)  | - GPT 요약 기능 구현 완료<br>- 요약 결과 UI 구성<br>- OpenAI 연동 및 보안 점검                                                                                                 | ✅ 완료 |
+| Day 7  | 7/2 (수)  | - 감정 분석 로직 구현<br>- 감정별 피드백 구성<br>- 요약 및 감정 기록 저장 기능 구현<br>- summaries 테이블 연동 및 테스트 완료<br>- 자동 user_profiles 생성 트리거 점검 및 완료 | ✅ 완료 |
+| Day 8  | 7/3 (목)  | - 일기 캘린더 구조 설계 및 연동 준비                                                                                                                                           | 🔜 예정 |
+| Day 9  | 7/4 (금)  | - 마이페이지 구조 구현 (내 기록, 그룹 등)<br>- 프로필 공개 설정                                                                                                                | 🔜 예정 |
+| Day 10 | 7/7 (월)  | - PWA 설치 테스트<br>- Vercel 배포 준비 및 점검                                                                                                                                | 🔜 예정 |
 
 ---
 
-✏️ 이 프로젝트는 개발 중이며, 자세한 기능 설명과 릴리즈 정보는 추후 업데이트될 예정.
+✏️ 이 프로젝트는 계속 업데이트 중이며, 상세 구현/문제 해결 과정은 개발 블로그에 기록되어 있습니다.
