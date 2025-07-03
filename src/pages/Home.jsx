@@ -22,13 +22,13 @@ export default function Home() {
 
       <nav className="space-y-2">
         <Link to="/mypage" className="text-blue-500 underline block">
-          마이페이지
+          MyPage
         </Link>
         <Link to="/summary" className="text-blue-500 underline block">
-          요약
+          일기 작성
         </Link>
         <Link to="/chat" className="text-blue-500 underline block">
-          채팅
+          Chat
         </Link>
       </nav>
 
