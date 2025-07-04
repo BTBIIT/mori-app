@@ -4,9 +4,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
-import MyPage from "./pages/MyPage";
-import Summary from "./pages/Summary";
+import CalendarView from "./pages/CalendarView.jsx";
+import DiaryWrite from "./pages/DiaryWrite";
 import Chat from "./pages/Chat";
+
+// ✅ 테스트용 도넛 확인 페이지
+import TestLoading from "./pages/TestLoading.jsx";
+// 월간 요약 추가
+import ResultMonthly from "./pages/ResultMonthly.jsx";
 
 function AppRoutes() {
   return (
@@ -22,18 +27,18 @@ function AppRoutes() {
           }
         />
         <Route
-          path="/mypage"
+          path="/calendarview"
           element={
             <PrivateRoute>
-              <MyPage />
+              <CalendarView />
             </PrivateRoute>
           }
         />
         <Route
-          path="/summary"
+          path="/diarywrite"
           element={
             <PrivateRoute>
-              <Summary />
+              <DiaryWrite />
             </PrivateRoute>
           }
         />
@@ -42,6 +47,18 @@ function AppRoutes() {
           element={
             <PrivateRoute>
               <Chat />
+            </PrivateRoute>
+          }
+        />
+
+        {/* ✅ 테스트용 도넛 로딩 화면 */}
+        <Route path="/test-loading" element={<TestLoading />} />
+        {/* ✅ 월간 요약 결과 페이지 */}
+        <Route
+          path="/result-monthly"
+          element={
+            <PrivateRoute>
+              <ResultMonthly />
             </PrivateRoute>
           }
         />

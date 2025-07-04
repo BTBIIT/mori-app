@@ -21,11 +21,11 @@ export default function Home() {
       <p className="mb-4">환영합니다, {user?.email}님</p>
 
       <nav className="space-y-2">
-        <Link to="/mypage" className="text-blue-500 underline block">
-          MyPage
-        </Link>
-        <Link to="/summary" className="text-blue-500 underline block">
+        <Link to="/diarywrite" className="text-blue-500 underline block">
           일기 작성
+        </Link>
+        <Link to="/calendarview" className="text-blue-500 underline block">
+          캘린더
         </Link>
         <Link to="/chat" className="text-blue-500 underline block">
           Chat

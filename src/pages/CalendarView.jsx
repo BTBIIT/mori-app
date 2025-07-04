@@ -7,8 +7,9 @@ import {
   updateSummary,
 } from "../lib/summaryApi";
 import { summarizeWithGPT } from "../lib/openai";
+import { useNavigate } from "react-router-dom";
 
-export default function MyPage() {
+export default function CalendarView() {
   const { user } = useAuth();
   const [summaryDates, setSummaryDates] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -19,6 +20,27 @@ export default function MyPage() {
   const [showYearModal, setShowYearModal] = useState(false);
   const [editingSummaryId, setEditingSummaryId] = useState(null);
   const [editingContent, setEditingContent] = useState("");
+  const navigate = useNavigate(); // 상태 추가
+
+  const handleMonthlySummary = () => {
+    navigate("/result-monthly", {
+      state: {
+        emotions: {
+          슬픔: 60,
+          기쁨: 20,
+          아픔: 10,
+          집착: 10,
+        },
+        summary: "이번 달은 감정의 변화가 많았던 시기였어요.",
+        feedback: "자신을 돌보고, 마음을 정리하는 시간을 가져보세요.",
+        actions: [
+          "하루 30분 산책하기",
+          "감정일기 쓰기",
+          "따뜻한 음식 챙겨 먹기",
+        ],
+      },
+    });
+  };
 
   const yearOptions = Array.from(
     { length: 30 },
@@ -379,6 +401,7 @@ export default function MyPage() {
           onMouseLeave={(e) => {
             e.currentTarget.style.borderColor = "transparent";
           }}
+          onClick={handleMonthlySummary} // ✅ 추가
         >
           이번 달 요약 하기
         </button>
