@@ -1,9 +1,12 @@
+// 📍 src/pages/DiaryWrite.jsx
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { summarizeWithGPT } from "../lib/openai";
 import { extractSection } from "../lib/extractSection";
 import LoadingDonut from "../components/LoadingDonut";
 
+// 감정 퍼센트 추출 함수
 const parseEmotionPercentages = (text) => {
   const emotionRegex = /([가-힣]+)\s?(\d+(?:\.\d+)?)%/g;
   const result = {};
@@ -13,13 +16,6 @@ const parseEmotionPercentages = (text) => {
     result[emotion] = parseFloat(percent);
   }
   return result;
-};
-
-const extractRecommendations = (text) => {
-  return text
-    .split(/[.。]/)
-    .map((s) => s.trim())
-    .filter((s) => s.length > 4);
 };
 
 const DiaryWrite = () => {
@@ -33,19 +29,19 @@ const DiaryWrite = () => {
     setLoading(true);
     try {
       const gptResponse = await summarizeWithGPT(diaryText);
+      console.log("🧪 GPT 전체 응답:", gptResponse);
 
-      const summary = extractSection(gptResponse, "📘");
-      const feedback = extractSection(gptResponse, "💬");
-      const emotionText = extractSection(gptResponse, "❤️");
+      const summary = extractSection(gptResponse.raw, "📘");
+      const feedback = extractSection(gptResponse.raw, "💬");
+      const emotionText = extractSection(gptResponse.raw, "❤️");
 
       const parsedEmotions = parseEmotionPercentages(emotionText);
-      const recommendedActions = extractRecommendations(feedback);
 
       navigate("/result-daily", {
         state: {
           emotions: parsedEmotions,
           feedback,
-          actions: recommendedActions,
+          actions: gptResponse.actions,
           summary,
         },
       });

@@ -1,4 +1,4 @@
-// 📍 src/lib/openai.js
+import { DAILY_SUMMARY_PROMPT } from "./prompts";
 
 // 💡 OpenAI API를 통해 일기 요약 및 감정 분석을 수행하는 함수
 export async function summarizeWithGPT(inputText) {
@@ -18,22 +18,7 @@ export async function summarizeWithGPT(inputText) {
         messages: [
           {
             role: "system",
-            content: `
-너는 ‘Mori’라는 감정 기반 AI 다이어리 앱의 요약 도우미야.
-
-사용자가 작성한 하루 일기를 3~4줄로 간결하게 요약해줘.
-요약은 다음 규칙을 따라야 해:
-
-1. 핵심 활동, 사건, 감정 중심으로 요약
-2. 따뜻하고 공감되는 말투로 표현
-3. 요약 후, 간단한 감정 피드백이나 응원 메시지를 덧붙여줘
-4. 마지막에 사용자의 전반적인 감정을 한 단어로 분석해줘
-
-⚠️ 반드시 아래 출력 형식을 그대로 따를 것:
-📘 요약: [내용]
-💬 피드백: [내용]
-❤️ 감정: [감정 단어] (예: 행복, 우울, 불안, 분노, 평온 등)
-            `.trim(),
+            content: DAILY_SUMMARY_PROMPT,
           },
           {
             role: "user",
@@ -57,15 +42,25 @@ export async function summarizeWithGPT(inputText) {
     console.log("✅ GPT 응답:", content);
 
     // ✅ 응답 파싱
-    const summaryMatch = content.match(/📘 요약:\s*(.+)/);
-    const feedbackMatch = content.match(/💬 피드백:\s*(.+)/);
-    const emotionMatch = content.match(/❤️ 감정:\s*(.+)/);
+    const summaryMatch = content.match(/📘 요약:\s*(.*)/);
+    const feedbackMatch = content.match(/💬 피드백:\s*(.*)/);
+    const emotionMatch = content.match(/❤️ 감정:\s*(.*)/);
+    const actionBlock = content.match(/📝 행동 추천:\s*([\s\S]*)/); // 줄바꿈 포함 전체 블록
+
+    // ✅ 행동 추천 항목 추출 (줄바꿈 또는 목록 형식 구분)
+    const actions = actionBlock
+      ? actionBlock[1]
+          .split(/\n|[-•▪️‣]/) // 줄바꿈 또는 목록 구분자
+          .map((s) => s.trim())
+          .filter((s) => s.length > 1)
+      : [];
 
     return {
       summary: summaryMatch ? summaryMatch[1].trim() : null,
       feedback: feedbackMatch ? feedbackMatch[1].trim() : null,
       emotion: emotionMatch ? emotionMatch[1].trim() : null,
-      raw: content, // 디버깅 및 예외 대비 원본 포함
+      actions,
+      raw: content,
     };
   } catch (error) {
     console.error("🔥 예외 발생:", error);

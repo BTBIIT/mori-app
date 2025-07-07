@@ -1,3 +1,5 @@
+// 📁 src/pages/ResultDaily.jsx
+
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import EmotionChart from "../components/EmotionChart";
@@ -11,6 +13,12 @@ const ResultDaily = () => {
   const actions = state?.actions || [];
   const summary = state?.summary || "";
 
+  console.log("✅ ResultDaily.jsx 진입");
+  console.log("📊 감정 상태:", emotions);
+  console.log("📘 요약:", summary);
+  console.log("💬 피드백:", feedback);
+  console.log("📝 행동 추천:", actions);
+
   return (
     <div className="max-w-xl mx-auto p-6 space-y-6">
       <h2 className="text-2xl font-semibold mb-2">📘 오늘의 요약</h2>
@@ -22,16 +30,24 @@ const ResultDaily = () => {
       <EmotionChart data={emotions} />
 
       <div className="bg-green-50 p-4 rounded-xl shadow text-gray-800 text-sm">
-        <h3 className="font-semibold mb-1">💬 모리의 한마디</h3>
+        <div className="flex items-center gap-2 mb-1">
+          <img src="/logo512.png" alt="한마디" className="w-5 h-5" />
+          <h3 className="font-semibold">모리의 한마디</h3>
+        </div>
         <p>{feedback}</p>
       </div>
 
       {actions.length > 0 && (
         <div className="bg-white border rounded-lg p-4 shadow-sm">
-          <h3 className="font-semibold mb-2">📝 모리의 행동 추천</h3>
-          <ul className="list-disc pl-5 text-sm space-y-1">
+          <div className="flex items-center gap-2 mb-2">
+            <h3 className="font-semibold">💡모리의 행동 추천</h3>
+          </div>
+          <ul className="text-sm space-y-1">
             {actions.map((a, idx) => (
-              <li key={idx}>{a}</li>
+              <li key={idx} className="flex items-start gap-2">
+                <span className="text-green-500">✅</span>
+                <span>{a}</span>
+              </li>
             ))}
           </ul>
         </div>

@@ -11,6 +11,7 @@ React + Tailwind + Supabase + OpenAI 기반으로 개발되었으며, 설치형 
 🔗 [Mori 개발 일지 5일차](https://code-palette.tistory.com/33) <br/>
 🔗 [Mori 개발 일지 6일차](https://code-palette.tistory.com/34) <br/>
 🔗 [Mori 개발 일지 7일차](https://code-palette.tistory.com/35) <br/>
+🔗 [Mori 개발 일지 8일차](https://code-palette.tistory.com/36) <br/>
 
 ---
 
@@ -24,55 +25,36 @@ React + Tailwind + Supabase + OpenAI 기반으로 개발되었으며, 설치형 
 
 ---
 
-## 📁 폴더 및 파일 구조 (2025.07.04 기준)
+## 📁 폴더 구조 (2025-07-07 기준)
 
 ```
 src/
-├── assets/                             # 정적 파일 (로고, 앱 아이콘 등)
-│   └── logo192.png
-│   └── logo512.png
-│   └── app-icon.png
-
-├── components/                         # 공통 UI 컴포넌트 및 시각화 요소
-│   ├── LoginButton.jsx                # Google 로그인 버튼 (Supabase 연동)
-│   ├── LogoutButton.jsx               # 로그아웃 처리
-│   ├── PrivateRoute.jsx               # 인증 기반 라우팅 보호
-│   ├── EmotionChart.jsx               # 감정 비율 시각화 그래프
-│   └── LoadingDonut.jsx               # 요약 중 애니메이션 (도넛형)
-
-├── lib/                                # API 및 전역 로직
-│   ├── AuthContext.jsx                # 전역 로그인 상태 관리
-│   ├── useAuth.js                     # useContext 훅 래핑
-│   ├── supabase.js                    # Supabase 클라이언트 초기화
-│   ├── openai.js                      # GPT 요약 및 감정 분석 호출
-│   ├── summaryApi.js                  # Supabase 요약 CRUD API 함수
-│   ├── emotionColors.js               # 감정명별 색상 맵핑 및 분류 로직
-│   └── extractSection.js              # GPT 응답 파싱 유틸
-
-├── pages/                              # 주요 화면 (라우팅 연결)
-│   ├── Login.jsx                      # 로그인 소개 페이지
-│   ├── Home.jsx                       # 일기 작성 진입 뷰
-│   ├── DiaryWrite.jsx                # 일기 입력 및 요약 실행
-│   ├── ResultDaily.jsx               # 일간 요약 결과 (감정/피드백/추천)
-│   ├── CalendarView.jsx              # 📅 요약 기록 캘린더 및 삭제 기능 포함
-│   ├── ResultMonthly.jsx             # 월간 감정 분석 및 행동 추천
-│   └── Chat.jsx                      # 감정 기반 대화 (예정)
-
-├── App.jsx                             # 루트 컴포넌트 (AuthProvider, Routes 포함)
-├── AppRoutes.jsx                       # PrivateRoute 포함한 라우팅 설정
-├── index.css                           # Tailwind 및 전역 CSS
-├── main.jsx                            # 진입점
-
-public/
-├── favicon.ico                         # 탭 아이콘
-├── manifest.webmanifest                # PWA 메타데이터
-├── logo192.png / logo512.png           # 앱 설치 아이콘
-
-.env                                     # OpenAI API 키 등 환경 변수
-.gitignore                               # Git 추적 제외 설정
-package.json                             # 종속성 관리
-tailwind.config.js                       # Tailwind 테마 설정
-vite.config.js                           # Vite 빌드/서버 설정
+├── assets/                      # 정적 리소스 저장용 (현재 react.svg만 존재, 실제 사용되지 않음)
+│   └── react.svg
+├── components/                 # 공통 컴포넌트 모음
+│   ├── EmotionChart.jsx        # 감정 분석 결과 시각화 바 차트
+│   ├── LoadingDonut.jsx        # 로딩 상태 도넛 애니메이션
+│   ├── LoginButton.jsx         # Google 로그인 버튼
+│   ├── LogoutButton.jsx        # 로그아웃 버튼
+│   └── PrivateRoute.jsx        # 인증 여부에 따른 보호 라우팅
+├── lib/                        # API 및 유틸 함수
+│   ├── AuthContext.jsx         # 로그인 Context 제공
+│   ├── extractSection.js       # GPT 응답 파트 추출 함수
+│   ├── openai.js               # OpenAI API 호출 및 응답 파싱
+│   ├── prompts.js              # GPT에 전달되는 프롬프트 모음
+│   ├── supabase.js             # Supabase 클라이언트 초기화
+│   └── useAuth.js              # 사용자 인증 커스텀 훅
+├── pages/                      # 화면 라우팅 페이지들
+│   ├── CalendarView.jsx        # 마이페이지 - 달력 기반 기록 열람
+│   ├── Chat.jsx                # (예정) 사용자 간 대화 기능
+│   ├── DiaryWrite.jsx          # 일기 작성 및 요약 요청
+│   ├── Login.jsx               # 로그인 페이지
+│   ├── ResultDaily.jsx         # 일간 요약 결과 표시
+│   ├── ResultMonthly.jsx       # 월간 요약 결과 표시
+│   └── TestLoading.jsx         # 도넛 애니메이션 테스트 페이지
+├── App.jsx                     # 앱의 진입점 컴포넌트
+├── AppRoutes.jsx               # 전체 라우팅 관리
+└── main.jsx                    # React DOM 렌더링
 ```
 
 ---
@@ -81,7 +63,7 @@ vite.config.js                           # Vite 빌드/서버 설정
 
 ---
 
-## 📆 Mori 개발 일정표 (최신 업데이트: 2025-07-04 기준)
+## 📆 Mori 개발 일정표 (최신 업데이트: 2025-07-09 기준)
 
 | Day    | 날짜      | 주요 작업 내용                                                                                                                      | 상태    |
 | ------ | --------- | ----------------------------------------------------------------------------------------------------------------------------------- | ------- |
@@ -94,8 +76,9 @@ vite.config.js                           # Vite 빌드/서버 설정
 | Day 7  | 7/2 (수)  | - 감정 분석 및 피드백 출력<br>- RLS 정책 정리 및 테스트<br>- 요약 결과 저장 테스트                                                  | ✅ 완료 |
 | Day 8  | 7/3 (목)  | - 📅 캘린더 UI 수동 구현<br>- 날짜별 요약 하이라이트<br>- 연도 선택 모달<br>- 요약/삭제 기능 처리                                   | ✅ 완료 |
 | Day 9  | 7/4 (금)  | - 감정 통계 시각화 컴포넌트 제작<br>- 도넛 로딩 UI 구현<br>- ResultDaily.jsx 결과화면 구현<br>- ResultMonthly.jsx 구조 생성 및 연결 | ✅ 완료 |
-| Day 10 | 7/8 (월)  | - GPT 프롬프트 정비 (일간/월간 구분)<br>- `extractSection()` 및 감정 파싱 유틸 정리                                                 | 🔜 예정 |
-| Day 11 | 7/9 (화)  | - `DiaryWrite.jsx` 리팩토링<br>- 로딩 / 결과 분리<br>- 상태 기반 navigate 처리 확정                                                 | 🔜 예정 |
-| Day 12 | 7/10 (목) | - 월간 요약 실행 기능 연동<br>- 실제 GPT 요청 및 응답 정리<br>- ResultMonthly.jsx 기능 연동                                         | 🔜 예정 |
-| Day 13 | 7/11 (금) | - 전체 흐름 QA<br>- 에러 처리 및 UX 점검<br>- 감정 색상 일관화                                                                      | 🔜 예정 |
-| Day 14 | 7/12 (토) | - Vercel 배포 및 설치 테스트<br>- 최종 README 및 마감 문서 작성                                                                     | 🔜 예정 |
+| Day 10 | 7/7 (월)  | - GPT 프롬프트 정비 (일간/월간 구분)<br>- extractSection 및 감정 파싱 유틸 정리<br>- ✅ 기술 블로그 작성 예정                       | ✅ 완료 |
+| Day 11 | 7/8 (화)  | - DiaryWrite 리팩토링<br>- 감정 퍼센트 파싱 개선<br>- GPT 응답 구조 및 navigate 전달 개선                                           | ✅ 완료 |
+| Day 12 | 7/9 (수)  | - ResultDaily UI 개선<br>- 행동 추천 이모지 커스터마이징<br>- 리스트 스타일 개선<br>- README 및 개발일지 문서화                     | ✅ 완료 |
+| Day 13 | 7/10 (목) | - 월간 요약 실행 기능 연동<br>- 실제 GPT 요청 및 응답 정리<br>- ResultMonthly.jsx 기능 연동                                         | 🔜 예정 |
+| Day 14 | 7/11 (금) | - 전체 흐름 QA<br>- 에러 처리 및 UX 점검<br>- 감정 색상 일관화                                                                      | 🔜 예정 |
+| Day 15 | 7/12 (토) | - Vercel 배포 및 설치 테스트<br>- 최종 README 및 마감 문서 작성                                                                     | 🔜 예정 |
