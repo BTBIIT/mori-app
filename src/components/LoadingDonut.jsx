@@ -1,10 +1,10 @@
 import React from "react";
 
-const LoadingDonut = ({ text = "로딩 중입니다..." }) => {
+const LoadingDonut = ({ text = null, textLines = [] }) => {
   return (
     <div className="flex flex-col items-center justify-center min-h-[300px]">
       <div className="relative w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64">
-        {/* 회전하는 그라데이션 도넛 */}
+        {/* 회전 도넛 */}
         <div
           className="absolute inset-0 rounded-full animate-spin-slow z-0"
           style={{
@@ -17,8 +17,12 @@ const LoadingDonut = ({ text = "로딩 중입니다..." }) => {
         />
 
         {/* 도넛 중앙 텍스트 */}
-        <div className="absolute inset-0 flex items-center justify-center z-10 text-center px-4 text-sm sm:text-base font-medium text-gray-700 leading-snug">
-          {text}
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-10 text-center px-4 text-sm sm:text-base font-medium text-gray-700 leading-snug">
+          {textLines.length > 0 ? (
+            textLines.map((line, i) => <div key={i}>{line}</div>)
+          ) : (
+            <div>{text}</div>
+          )}
         </div>
       </div>
     </div>

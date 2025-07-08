@@ -6,7 +6,6 @@ import {
   deleteSummary,
   updateSummary,
 } from "../lib/summaryApi";
-import { summarizeWithGPT } from "../lib/openai";
 import { useNavigate } from "react-router-dom";
 
 export default function CalendarView() {
@@ -20,27 +19,7 @@ export default function CalendarView() {
   const [showYearModal, setShowYearModal] = useState(false);
   const [editingSummaryId, setEditingSummaryId] = useState(null);
   const [editingContent, setEditingContent] = useState("");
-  const navigate = useNavigate(); // 상태 추가
-
-  const handleMonthlySummary = () => {
-    navigate("/result-monthly", {
-      state: {
-        emotions: {
-          슬픔: 60,
-          기쁨: 20,
-          아픔: 10,
-          집착: 10,
-        },
-        summary: "이번 달은 감정의 변화가 많았던 시기였어요.",
-        feedback: "자신을 돌보고, 마음을 정리하는 시간을 가져보세요.",
-        actions: [
-          "하루 30분 산책하기",
-          "감정일기 쓰기",
-          "따뜻한 음식 챙겨 먹기",
-        ],
-      },
-    });
-  };
+  const navigate = useNavigate();
 
   const yearOptions = Array.from(
     { length: 30 },
@@ -115,35 +94,6 @@ export default function CalendarView() {
     setSummariesForSelectedDate(results);
   };
 
-  const handleEdit = (id, content) => {
-    setEditingSummaryId(id);
-    setEditingContent(content);
-  };
-
-  const handleUpdate = async () => {
-    const gptResponse = await summarizeWithGPT(editingContent);
-    console.log("📘 GPT 응답:", gptResponse);
-
-    try {
-      await updateSummary(editingSummaryId, {
-        content: editingContent,
-        summary: gptResponse.summary,
-        feedback: gptResponse.feedback,
-        emotion: gptResponse.emotion,
-      });
-      console.log("✅ Supabase 업데이트 성공");
-
-      const results = await getSummariesByDate(user.id, selectedDate);
-      setSummariesForSelectedDate(results);
-    } catch (error) {
-      console.error("🔥 업데이트 중 오류 발생:", error);
-    }
-
-    setEditingSummaryId(null);
-    setEditingContent("");
-    setSelectedDate(null);
-  };
-
   const closeModal = () => {
     setSelectedDate(null);
     setEditingSummaryId(null);
@@ -195,143 +145,6 @@ export default function CalendarView() {
     </button>
   );
 
-  const renderYearModal = () => (
-    <div
-      className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50"
-      onClick={() => setShowYearModal(false)}
-    >
-      <div
-        className="bg-white rounded-xl p-4 max-h-80 overflow-y-auto scroll-smooth w-40"
-        onClick={(e) => e.stopPropagation()}
-        style={{ scrollbarColor: "#E8B86D #ffffff", scrollbarWidth: "thin" }}
-      >
-        <div
-          className="text-center font-bold mb-2"
-          style={{ color: "#A1D6B2" }}
-        >
-          연도 선택
-        </div>
-        {yearOptions.map((year) => (
-          <div
-            key={year}
-            className="py-1 px-2 text-center rounded cursor-pointer hover:border hover:border-blue-500"
-            style={{
-              color: "#A1D6B2",
-              border:
-                year === currentYear
-                  ? "2px solid #00A0FF"
-                  : "2px solid transparent",
-            }}
-            onClick={() => {
-              setCurrentYear(year);
-              setShowYearModal(false);
-            }}
-          >
-            {year}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
-  const renderSummaryModal = () => (
-    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-      <div
-        className="bg-white rounded-xl p-4 max-w-md w-full mx-4 relative"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button
-          className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full"
-          style={{ backgroundColor: "#A1D6B2", color: "white" }}
-          onClick={closeModal}
-        >
-          ✕
-        </button>
-        <h3
-          className="text-center text-lg font-bold mb-2"
-          style={{ color: "#A1D6B2" }}
-        >
-          {selectedDate} 요약
-        </h3>
-        {summariesForSelectedDate.map((entry) => (
-          <div
-            key={entry.id}
-            className="border rounded p-3 mb-2 overflow-y-auto"
-            style={{
-              borderColor: "#00A0FF",
-              backgroundColor:
-                editingSummaryId === entry.id ? "#F9F9F9" : "#FFFFFF",
-              maxHeight: "200px",
-              scrollbarColor: "#E8B86D #f0f0f0",
-            }}
-          >
-            {editingSummaryId === entry.id ? (
-              <>
-                <textarea
-                  className="w-full p-2 border rounded mb-2"
-                  rows={3}
-                  value={editingContent}
-                  onChange={(e) => setEditingContent(e.target.value)}
-                  style={{ scrollbarColor: "#E8B86D #f0f0f0" }}
-                />
-                <div className="flex gap-2">
-                  <button
-                    className="flex-1 py-1 rounded border"
-                    style={{
-                      backgroundColor: "#A1D6B2",
-                      borderColor: "#00A0FF",
-                    }}
-                    onClick={handleUpdate}
-                  >
-                    저장
-                  </button>
-                  <button
-                    className="flex-1 py-1 rounded border"
-                    style={{
-                      backgroundColor: "#E8B86D",
-                      borderColor: "#00A0FF",
-                    }}
-                    onClick={() => setEditingSummaryId(null)}
-                  >
-                    취소
-                  </button>
-                </div>
-              </>
-            ) : (
-              <>
-                <p>{entry.content}</p>
-                <div className="flex justify-end gap-2 mt-2">
-                  {/*
-                  <button
-                    className="px-3 py-1 rounded border text-sm"
-                    style={{
-                      backgroundColor: "#A1D6B2",
-                      borderColor: "#00A0FF",
-                    }}
-                    onClick={() => handleEdit(entry.id, entry.content)}
-                  >
-                    수정
-                  </button>
-                  */}
-                  <button
-                    className="px-3 py-1 rounded border text-sm"
-                    style={{
-                      backgroundColor: "#E8B86D",
-                      borderColor: "#00A0FF",
-                    }}
-                    onClick={() => handleDelete(entry.id)}
-                  >
-                    삭제
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
   return (
     <div
       className="min-h-screen flex flex-col items-center py-8 px-2"
@@ -340,7 +153,8 @@ export default function CalendarView() {
       <img
         src="/logo192.png"
         alt="logo"
-        className="w-10 h-10 absolute top-4 left-4"
+        className="w-10 h-10 absolute top-4 left-4 cursor-pointer"
+        onClick={() => navigate(-1)}
       />
       <div className="bg-white p-4 sm:p-6 lg:p-8 rounded-2xl shadow-md w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl">
         <div className="flex justify-between items-center mb-4">
@@ -364,13 +178,9 @@ export default function CalendarView() {
           className="grid grid-cols-7 text-center mb-2 font-semibold text-sm sm:text-base md:text-lg"
           style={{ color: "#A1D6B2" }}
         >
-          <div>일</div>
-          <div>월</div>
-          <div>화</div>
-          <div>수</div>
-          <div>목</div>
-          <div>금</div>
-          <div>토</div>
+          {["일", "월", "화", "수", "목", "금", "토"].map((day) => (
+            <div key={day}>{day}</div>
+          ))}
         </div>
 
         <div className="grid grid-cols-7 gap-y-2">
@@ -401,14 +211,103 @@ export default function CalendarView() {
           onMouseLeave={(e) => {
             e.currentTarget.style.borderColor = "transparent";
           }}
-          onClick={handleMonthlySummary} // ✅ 추가
+          onClick={() => navigate("/result-monthly")}
         >
           이번 달 요약 하기
         </button>
       </div>
 
-      {showYearModal && renderYearModal()}
-      {selectedDate && renderSummaryModal()}
+      {showYearModal && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50"
+          onClick={() => setShowYearModal(false)}
+        >
+          <div
+            className="bg-white rounded-xl p-4 max-h-80 overflow-y-auto scroll-smooth w-40"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              scrollbarColor: "#E8B86D #ffffff",
+              scrollbarWidth: "thin",
+            }}
+          >
+            <div
+              className="text-center font-bold mb-2"
+              style={{ color: "#A1D6B2" }}
+            >
+              연도 선택
+            </div>
+            {yearOptions.map((year) => (
+              <div
+                key={year}
+                className="py-1 px-2 text-center rounded cursor-pointer hover:border hover:border-blue-500"
+                style={{
+                  color: "#A1D6B2",
+                  border:
+                    year === currentYear
+                      ? "2px solid #00A0FF"
+                      : "2px solid transparent",
+                }}
+                onClick={() => {
+                  setCurrentYear(year);
+                  setShowYearModal(false);
+                }}
+              >
+                {year}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {selectedDate && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div
+            className="bg-white rounded-xl p-4 max-w-md w-full mx-4 relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full"
+              style={{ backgroundColor: "#A1D6B2", color: "white" }}
+              onClick={closeModal}
+            >
+              ✕
+            </button>
+            <h3
+              className="text-center text-lg font-bold mb-2"
+              style={{ color: "#A1D6B2" }}
+            >
+              {selectedDate} 요약
+            </h3>
+            {summariesForSelectedDate.map((entry) => (
+              <div
+                key={entry.id}
+                className="border rounded p-3 mb-2 overflow-y-auto"
+                style={{
+                  borderColor: "#00A0FF",
+                  backgroundColor:
+                    editingSummaryId === entry.id ? "#F9F9F9" : "#FFFFFF",
+                  maxHeight: "200px",
+                  scrollbarColor: "#E8B86D #f0f0f0",
+                }}
+              >
+                <p>{entry.content}</p>
+                <div className="flex justify-end gap-2 mt-2">
+                  <button
+                    className="px-3 py-1 rounded border text-sm"
+                    style={{
+                      backgroundColor: "#E8B86D",
+                      borderColor: "#00A0FF",
+                    }}
+                    onClick={() => handleDelete(entry.id)}
+                  >
+                    삭제
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

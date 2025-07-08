@@ -1,35 +1,100 @@
-import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+// 📁 src/pages/ResultMonthly.jsx
+
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import EmotionChart from "../components/EmotionChart";
+import { summarizeWithGPT } from "../lib/openai";
+import { createClient } from "@supabase/supabase-js";
+import LoadingDonut from "../components/LoadingDonut";
+
+// ✅ Supabase 클라이언트 초기화
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+);
 
 const ResultMonthly = () => {
-  const { state } = useLocation();
   const navigate = useNavigate();
+  const [summary, setSummary] = useState("");
+  const [feedback, setFeedback] = useState("");
+  const [actions, setActions] = useState([]);
+  const [emotions, setEmotions] = useState({});
+  const [loading, setLoading] = useState(true);
 
-  // 테스트용 더미 데이터
-  const emotions = state?.emotions || {
-    슬픔: 60.2,
-    기쁨: 18.5,
-    아픔: 14.1,
-    집착: 7.2,
-  };
+  useEffect(() => {
+    const fetchMonthlySummary = async () => {
+      try {
+        const user = (await supabase.auth.getUser()).data.user;
+        const today = new Date();
+        const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1)
+          .toISOString()
+          .slice(0, 10);
+        const endOfMonth = new Date(
+          today.getFullYear(),
+          today.getMonth() + 1,
+          0
+        )
+          .toISOString()
+          .slice(0, 10);
 
-  const feedback =
-    state?.feedback ||
-    "이번 달은 감정 기복이 컸던 한 달이었어요. 자신을 돌보는 시간이 필요해 보여요.";
-  const actions = state?.actions || [
-    "산책을 자주 해보세요.",
-    "명상이나 글쓰기로 감정을 정리해보세요.",
-    "누군가에게 감정을 털어놓는 것도 좋아요.",
-  ];
-  const summary =
-    state?.summary ||
-    "이번 달은 전반적으로 감정의 파동이 컸고, 내면적으로 많은 생각이 있었던 한 달이었습니다.";
+        // ✅ 해당 월의 일기만 가져오기
+        const { data: entries, error } = await supabase
+          .from("summaries")
+          .select("content, date")
+          .eq("user_id", user.id)
+          .gte("date", startOfMonth)
+          .lte("date", endOfMonth)
+          .order("date", { ascending: true });
+
+        if (error) throw error;
+        if (!entries || entries.length === 0) {
+          setSummary("이번 달 작성된 일기가 없습니다.");
+          setLoading(false);
+          return;
+        }
+
+        // ✅ 모든 content를 한 줄씩 합치기
+        const allText = entries
+          .map((e) => `${e.date}\n${e.content}`)
+          .join("\n\n");
+
+        // ✅ GPT 요약 요청 (monthly)
+        const result = await summarizeWithGPT(allText, "monthly");
+
+        // ✅ 상태 저장 (emotion은 이미 object 형태로 전달됨)
+        setSummary(result.summary || "");
+        setFeedback(result.feedback || "");
+        setActions(result.actions || []);
+        setEmotions(result.emotion || {});
+      } catch (err) {
+        console.error("🔥 월간 요약 처리 오류:", err);
+        setSummary("요약 중 오류가 발생했습니다.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMonthlySummary();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="py-20">
+        <LoadingDonut
+          textLines={[
+            "모리가 이번달 일기를",
+            "읽고 있어요",
+            "잠시 후 결과를 알려드릴게요",
+          ]}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-xl mx-auto p-6 space-y-6">
       <h2 className="text-2xl font-semibold mb-4">📘 이번 달 요약</h2>
-      <p className="bg-white text-sm p-4 rounded-xl shadow text-gray-800">
+      <p className="bg-white text-sm p-4 rounded-xl shadow text-gray-800 whitespace-pre-line">
         {summary}
       </p>
 
@@ -37,18 +102,26 @@ const ResultMonthly = () => {
       <EmotionChart data={emotions} />
 
       <div className="bg-green-50 p-4 rounded-xl shadow text-gray-800 text-sm">
-        <h3 className="font-semibold mb-1">💬 모리의 한마디</h3>
+        <img src="/logo512.png" alt="한마디" className="w-5 h-5" />
+        <h3 className="font-semibold mb-1">모리의 한마디</h3>
         <p>{feedback}</p>
       </div>
 
-      <div className="bg-white border rounded-lg p-4 shadow-sm">
-        <h3 className="font-semibold mb-2">📝 모리의 행동 추천</h3>
-        <ul className="list-disc pl-5 text-sm space-y-1">
-          {actions.map((a, idx) => (
-            <li key={idx}>{a}</li>
-          ))}
-        </ul>
-      </div>
+      {actions.length > 0 && (
+        <div className="bg-white border rounded-lg p-4 shadow-sm">
+          <div className="flex items-center gap-2 mb-2">
+            <h3 className="font-semibold">💡모리의 행동 추천</h3>
+          </div>
+          <ul className="text-sm space-y-1">
+            {actions.map((a, idx) => (
+              <li key={idx} className="flex items-start gap-2">
+                <span className="text-green-500">✅</span>
+                <span>{a}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <button
         onClick={() => navigate("/calendarview")}
