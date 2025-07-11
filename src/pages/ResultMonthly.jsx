@@ -13,12 +13,20 @@ const supabase = createClient(
   import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
+// ✅ 감정 정렬 유틸 함수 (퍼센트 내림차순 + ㄱ~ㅎ 순)
+function sortEmotionObject(emotionObj) {
+  return Object.entries(emotionObj).sort((a, b) => {
+    if (a[1] !== b[1]) return b[1] - a[1];
+    return a[0].localeCompare(b[0], "ko");
+  });
+}
+
 const ResultMonthly = () => {
   const navigate = useNavigate();
   const [summary, setSummary] = useState("");
   const [feedback, setFeedback] = useState("");
   const [actions, setActions] = useState([]);
-  const [emotions, setEmotions] = useState({});
+  const [emotions, setEmotions] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -37,7 +45,6 @@ const ResultMonthly = () => {
           .toISOString()
           .slice(0, 10);
 
-        // ✅ 해당 월의 일기만 가져오기
         const { data: entries, error } = await supabase
           .from("summaries")
           .select("content, date")
@@ -53,19 +60,21 @@ const ResultMonthly = () => {
           return;
         }
 
-        // ✅ 모든 content를 한 줄씩 합치기
         const allText = entries
           .map((e) => `${e.date}\n${e.content}`)
           .join("\n\n");
 
-        // ✅ GPT 요약 요청 (monthly)
         const result = await summarizeWithGPT(allText, "monthly");
 
-        // ✅ 상태 저장 (emotion은 이미 object 형태로 전달됨)
         setSummary(result.summary || "");
         setFeedback(result.feedback || "");
         setActions(result.actions || []);
-        setEmotions(result.emotion || {});
+
+        const emotionRaw = result.emotion || {};
+        const emotionSorted = Array.isArray(emotionRaw)
+          ? emotionRaw
+          : sortEmotionObject(emotionRaw);
+        setEmotions(emotionSorted);
       } catch (err) {
         console.error("🔥 월간 요약 처리 오류:", err);
         setSummary("요약 중 오류가 발생했습니다.");

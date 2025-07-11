@@ -19,6 +19,20 @@ function parseEmotionLine(line) {
   return result;
 }
 
+// Refactoring -> sorting graph
+function sortEmotionObject(emotionObj) {
+  return Object.entries(emotionObj).sort((a, b) => {
+    const [emotionA, valueA] = a;
+    const [emotionB, valueB] = b;
+
+    if (valueA !== valueB) {
+      return valueB - valueA; // 퍼센트 내림차순
+    } else {
+      return emotionA.localeCompare(emotionB, "ko"); // 한글 ㄱ~ㅎ 순
+    }
+  });
+}
+
 // 💡 OpenAI API를 통해 일기 요약 및 감정 분석을 수행하는 함수
 export async function summarizeWithGPT(inputText, type = "daily") {
   const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
@@ -70,7 +84,9 @@ export async function summarizeWithGPT(inputText, type = "daily") {
 
     const emotionRaw = emotionMatch ? emotionMatch[1].trim() : null;
     const emotionParsed =
-      type === "monthly" ? parseEmotionLine(emotionRaw) : emotionRaw;
+      type === "monthly"
+        ? sortEmotionObject(parseEmotionLine(emotionRaw))
+        : emotionRaw;
 
     const actionBlock =
       type === "monthly"

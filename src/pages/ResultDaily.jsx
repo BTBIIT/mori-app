@@ -4,11 +4,30 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import EmotionChart from "../components/EmotionChart";
 
+// 🧠 감정 정렬 함수: 퍼센트 내림차순 → 퍼센트 동일 시 ㄱ~ㅎ 순
+function sortEmotionObject(emotionObj) {
+  return Object.entries(emotionObj).sort((a, b) => {
+    const [emotionA, valueA] = a;
+    const [emotionB, valueB] = b;
+
+    if (valueA !== valueB) {
+      return valueB - valueA;
+    } else {
+      return emotionA.localeCompare(emotionB, "ko");
+    }
+  });
+}
+
 const ResultDaily = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
 
-  const emotions = state?.emotions || {};
+  // ✅ 감정 배열 정렬 (배열 or 객체 유연 처리)
+  const rawEmotions = state?.emotions || {};
+  const emotions = Array.isArray(rawEmotions)
+    ? rawEmotions
+    : sortEmotionObject(rawEmotions);
+
   const feedback = state?.feedback || "분석된 피드백이 없습니다.";
   const actions = state?.actions || [];
   const summary = state?.summary || "";

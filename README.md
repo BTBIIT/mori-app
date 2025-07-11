@@ -14,6 +14,7 @@ React + Tailwind + Supabase + OpenAI 기반으로 개발되었으며, 설치형 
 🔗 [Mori 개발 일지 7일차](https://code-palette.tistory.com/35) <br/>
 🔗 [Mori 개발 일지 8일차](https://code-palette.tistory.com/36) <br/>
 🔗 [Mori 개발 일지 9일차](https://code-palette.tistory.com/37) <br/>
+🔗 [Mori 개발 일지 10일차](https://code-palette.tistory.com/38) <br/>
 
 ---
 
@@ -79,7 +80,7 @@ src/
 | Day 12 | 7/9 (수)  | 7/7 (월)  | - ResultDaily UI 개선<br>- 행동 추천 이모지 커스터마이징<br>- 리스트 스타일 개선<br>- README 및 개발일지 문서화                     | ✅ 완료 |
 | Day 13 | 7/10 (목) | 7/8 (화)  | - 전체 화면 흐름 및 설계 이미지 학습 완료<br>- 기능/디자인 문제점 분석 및 일정 리디자인 완료                                        | ✅ 완료 |
 | Day 14 | 7/11 (금) | 7/8 (화)  | - ResultMonthly 기능 연동 시작<br>- GPT 응답 → 감정 요약/시각화 적용 시작                                                           | ✅ 완료 |
-| Day 15 | 7/12 (토) | 예정      | - EmotionChart 정렬 구조 개선<br>- 감정 색상 매핑 리팩토링                                                                          | ⏳ 예정 |
+| Day 15 | 7/12 (토) | 7/11(금)  | - EmotionChart 정렬 구조 개선<br>- 감정 색상 매핑 리팩토링                                                                          | ✅ 완료 |
 | Day 16 | 7/14 (월) | 예정      | - Result 구조 통일화<br>- 캘린더 월간 요약 버튼 UX 점검                                                                             | ⏳ 예정 |
 | Day 17 | 7/15 (화) | 예정      | - 전체 기능 QA<br>- UI/UX 피드백 반영<br>- 감정 정렬 통합 반영                                                                      | ⏳ 예정 |
 | Day 18 | 7/16 (수) | 예정      | - Supabase 저장 로직 점검<br>- navigate 흐름, 삭제 기능 정리                                                                        | ⏳ 예정 |
