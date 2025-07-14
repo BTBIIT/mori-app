@@ -15,6 +15,7 @@ React + Tailwind + Supabase + OpenAI 기반으로 개발되었으며, 설치형 
 🔗 [Mori 개발 일지 8일차](https://code-palette.tistory.com/36) <br/>
 🔗 [Mori 개발 일지 9일차](https://code-palette.tistory.com/37) <br/>
 🔗 [Mori 개발 일지 10일차](https://code-palette.tistory.com/38) <br/>
+🔗 [Mori 개발 일지 11일차](https://code-palette.tistory.com/39) <br/>
 
 ---
 
