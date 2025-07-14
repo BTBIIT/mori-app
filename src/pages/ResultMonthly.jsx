@@ -7,19 +7,10 @@ import { summarizeWithGPT } from "../lib/openai";
 import { createClient } from "@supabase/supabase-js";
 import LoadingDonut from "../components/LoadingDonut";
 
-// ✅ Supabase 클라이언트 초기화
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
   import.meta.env.VITE_SUPABASE_ANON_KEY
 );
-
-// ✅ 감정 정렬 유틸 함수 (퍼센트 내림차순 + ㄱ~ㅎ 순)
-function sortEmotionObject(emotionObj) {
-  return Object.entries(emotionObj).sort((a, b) => {
-    if (a[1] !== b[1]) return b[1] - a[1];
-    return a[0].localeCompare(b[0], "ko");
-  });
-}
 
 const ResultMonthly = () => {
   const navigate = useNavigate();
@@ -66,15 +57,17 @@ const ResultMonthly = () => {
 
         const result = await summarizeWithGPT(allText, "monthly");
 
+        const sortedEmotions = Array.isArray(result.emotion)
+          ? result.emotion
+          : Object.entries(result.emotion || {}).sort((a, b) => {
+              if (a[1] !== b[1]) return b[1] - a[1];
+              return a[0].localeCompare(b[0], "ko");
+            });
+
         setSummary(result.summary || "");
         setFeedback(result.feedback || "");
         setActions(result.actions || []);
-
-        const emotionRaw = result.emotion || {};
-        const emotionSorted = Array.isArray(emotionRaw)
-          ? emotionRaw
-          : sortEmotionObject(emotionRaw);
-        setEmotions(emotionSorted);
+        setEmotions(sortedEmotions);
       } catch (err) {
         console.error("🔥 월간 요약 처리 오류:", err);
         setSummary("요약 중 오류가 발생했습니다.");
@@ -102,17 +95,19 @@ const ResultMonthly = () => {
 
   return (
     <div className="max-w-xl mx-auto p-6 space-y-6">
-      <h2 className="text-2xl font-semibold mb-4">📘 이번 달 요약</h2>
+      <h2 className="text-2xl font-semibold mb-2">📘 이번 달 요약</h2>
       <p className="bg-white text-sm p-4 rounded-xl shadow text-gray-800 whitespace-pre-line">
         {summary}
       </p>
 
-      <h2 className="text-xl font-semibold">❤️ 감정 분석</h2>
+      <h2 className="text-xl font-semibold mt-6">❤️ 감정 분석</h2>
       <EmotionChart data={emotions} />
 
       <div className="bg-green-50 p-4 rounded-xl shadow text-gray-800 text-sm">
-        <img src="/logo512.png" alt="한마디" className="w-5 h-5" />
-        <h3 className="font-semibold mb-1">모리의 한마디</h3>
+        <div className="flex items-center gap-2 mb-1">
+          <img src="/logo512.png" alt="한마디" className="w-5 h-5" />
+          <h3 className="font-semibold">모리의 한마디</h3>
+        </div>
         <p>{feedback}</p>
       </div>
 
@@ -134,7 +129,7 @@ const ResultMonthly = () => {
 
       <button
         onClick={() => navigate("/calendarview")}
-        className="mt-6 w-full bg-[#A1D6B2] hover:bg-[#8ecfa7] text-white font-semibold py-2 rounded-lg shadow"
+        className="mt-6 w-full bg-[#A1D6B2] hover:bg-[#8ecfa7] text-white font-semibold py-2 rounded-lg shadow-md hover:scale-105 transition-transform"
       >
         달력으로 돌아가기
       </button>

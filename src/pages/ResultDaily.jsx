@@ -4,44 +4,26 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import EmotionChart from "../components/EmotionChart";
 
-// 🧠 감정 정렬 함수: 퍼센트 내림차순 → 퍼센트 동일 시 ㄱ~ㅎ 순
-function sortEmotionObject(emotionObj) {
-  return Object.entries(emotionObj).sort((a, b) => {
-    const [emotionA, valueA] = a;
-    const [emotionB, valueB] = b;
-
-    if (valueA !== valueB) {
-      return valueB - valueA;
-    } else {
-      return emotionA.localeCompare(emotionB, "ko");
-    }
-  });
-}
-
 const ResultDaily = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
 
-  // ✅ 감정 배열 정렬 (배열 or 객체 유연 처리)
   const rawEmotions = state?.emotions || {};
   const emotions = Array.isArray(rawEmotions)
     ? rawEmotions
-    : sortEmotionObject(rawEmotions);
+    : Object.entries(rawEmotions).sort((a, b) => {
+        if (a[1] !== b[1]) return b[1] - a[1];
+        return a[0].localeCompare(b[0], "ko");
+      });
 
   const feedback = state?.feedback || "분석된 피드백이 없습니다.";
   const actions = state?.actions || [];
   const summary = state?.summary || "";
 
-  console.log("✅ ResultDaily.jsx 진입");
-  console.log("📊 감정 상태:", emotions);
-  console.log("📘 요약:", summary);
-  console.log("💬 피드백:", feedback);
-  console.log("📝 행동 추천:", actions);
-
   return (
     <div className="max-w-xl mx-auto p-6 space-y-6">
       <h2 className="text-2xl font-semibold mb-2">📘 오늘의 요약</h2>
-      <p className="text-gray-700 text-sm bg-white rounded-xl p-4 shadow">
+      <p className="text-gray-700 text-sm bg-white rounded-xl p-4 shadow whitespace-pre-line">
         {summary}
       </p>
 
@@ -74,7 +56,7 @@ const ResultDaily = () => {
 
       <button
         onClick={() => navigate("/")}
-        className="mt-6 w-full bg-[#A1D6B2] hover:bg-[#8ecfa7] text-white font-semibold py-2 rounded-lg shadow"
+        className="mt-6 w-full bg-[#A1D6B2] hover:bg-[#8ecfa7] text-white font-semibold py-2 rounded-lg shadow-md hover:scale-105 transition-transform"
       >
         홈으로 돌아가기
       </button>
