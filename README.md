@@ -16,6 +16,7 @@ React + Tailwind + Supabase + OpenAI 기반으로 개발되었으며, 설치형 
 🔗 [Mori 개발 일지 9일차](https://code-palette.tistory.com/37) <br/>
 🔗 [Mori 개발 일지 10일차](https://code-palette.tistory.com/38) <br/>
 🔗 [Mori 개발 일지 11일차](https://code-palette.tistory.com/39) <br/>
+🔗 [Mori 개발 일지 12일차](https://code-palette.tistory.com/40) <br/>
 
 ---
 
@@ -29,7 +30,7 @@ React + Tailwind + Supabase + OpenAI 기반으로 개발되었으며, 설치형 
 
 ---
 
-## 📁 폴더 구조 (2025-07-08 기준)
+## 📁 폴더 구조 (2025-07-15 기준)
 
 ```
 src/
@@ -50,12 +51,12 @@ src/
 │   └── useAuth.js              # 사용자 인증 커스텀 훅
 ├── pages/                      # 실제 라우팅되는 화면 단위 컴포넌트
 │   ├── CalendarView.jsx        # 달력 기반 마이페이지, 요약/삭제/연도선택 포함
-│   ├── Chat.jsx                # 채팅 기능 (예정)
 │   ├── DiaryWrite.jsx          # 일기 작성 및 GPT 요약 요청 화면
 │   ├── Login.jsx               # 최초 로그인 및 소셜 연동 페이지
 │   ├── ResultDaily.jsx         # 일간 결과 화면, 감정 + 피드백 + 행동 추천 포함
 │   ├── ResultMonthly.jsx       # 월간 결과 화면, 전체 일기 기반 감정 분석 및 행동 추천
-│   └── TestLoading.jsx         # 로딩 도넛 단독 테스트용 임시 페이지
+│   ├── TestLoading.jsx         # 로딩 도넛 단독 테스트용 임시 페이지
+│   └── WriteWelcome.jsx        # 일기 유도/리스트/작성 화면 (기존 Chat.jsx 대체)
 ├── App.jsx                     # 전체 앱의 루트 컴포넌트
 ├── AppRoutes.jsx               # 라우트 분기 및 보호 처리 컴포넌트
 └── main.jsx                    # React 진입점 (DOM 렌더링)
@@ -63,7 +64,7 @@ src/
 
 ---
 
-## 📆 Mori 개발 일정표 (최신 업데이트: 2025-07-08 기준)
+## 📆 Mori 개발 일정표 (최신 업데이트: 2025-07-15 기준)
 
 | Day    | 예정 날짜 | 실제 날짜 | 주요 작업 내용                                                                                                                      | 상태    |
 | ------ | --------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------- | ------- |
@@ -77,17 +78,15 @@ src/
 | Day 8  | 7/3 (목)  | 7/3 (목)  | - 📅 캘린더 UI 수동 구현<br>- 날짜별 요약 하이라이트<br>- 연도 선택 모달<br>- 요약/삭제 기능 처리                                   | ✅ 완료 |
 | Day 9  | 7/4 (금)  | 7/4 (금)  | - 감정 통계 시각화 컴포넌트 제작<br>- 도넛 로딩 UI 구현<br>- ResultDaily.jsx 결과화면 구현<br>- ResultMonthly.jsx 구조 생성 및 연결 | ✅ 완료 |
 | Day 10 | 7/7 (월)  | 7/7 (월)  | - GPT 프롬프트 정비 (일간/월간 구분)<br>- extractSection 및 감정 파싱 유틸 정리<br>- 기술 블로그 작성 예정                          | ✅ 완료 |
-| Day 11 | 7/8 (화)  | 7/7 (월)  | - DiaryWrite 리팩토링<br>- 감정 퍼센트 파싱 개선<br>- GPT 응답 구조 및 navigate 전달 개선                                           | ✅ 완료 |
-| Day 12 | 7/9 (수)  | 7/7 (월)  | - ResultDaily UI 개선<br>- 행동 추천 이모지 커스터마이징<br>- 리스트 스타일 개선<br>- README 및 개발일지 문서화                     | ✅ 완료 |
-| Day 13 | 7/10 (목) | 7/8 (화)  | - 전체 화면 흐름 및 설계 이미지 학습 완료<br>- 기능/디자인 문제점 분석 및 일정 리디자인 완료                                        | ✅ 완료 |
-| Day 14 | 7/11 (금) | 7/8 (화)  | - ResultMonthly 기능 연동 시작<br>- GPT 응답 → 감정 요약/시각화 적용 시작                                                           | ✅ 완료 |
-| Day 15 | 7/12 (토) | 7/11(금)  | - EmotionChart 정렬 구조 개선<br>- 감정 색상 매핑 리팩토링                                                                          | ✅ 완료 |
-| Day 16 | 7/14 (월) | 7/14(월)  | - Result 구조 통일화<br>- 캘린더 월간 요약 버튼 UX 점검                                                                             | ✅ 완료 |
-| Day 17 | 7/15 (화) | 예정      | - 전체 기능 QA<br>- UI/UX 피드백 반영                                                                                               | ⏳ 예정 |
-| Day 18 | 7/16 (수) | 예정      | - Supabase 저장 로직 점검<br>- navigate 흐름, 삭제 기능 정리                                                                        | ⏳ 예정 |
-| Day 19 | 7/17 (목) | 예정      | - 전체 기능 QA 및 예외처리<br>- 오류 대응 마무리                                                                                    | ⏳ 예정 |
-| Day 20 | 7/18 (금) | 예정      | - DiaryWrite / ResultDaily UI/UX 리팩토링 Day 1                                                                                     | ⏳ 예정 |
-| Day 21 | 7/19 (토) | 예정      | - DiaryWrite / ResultDaily UI/UX 리팩토링 Day 2<br>- 중앙 정렬 / 모바일 대응 / 버튼 구조 정리                                       | ⏳ 예정 |
-| Day 22 | 7/21 (월) | 예정      | - CalendarView, ResultMonthly, Login 등 전체 레이아웃 통일<br>- 홈 버튼 연결                                                        | ⏳ 예정 |
-| Day 23 | 7/22 (화) | 예정      | - UI 전수 QA (모바일/데스크탑 대응)<br>- console.log 제거                                                                           | ⏳ 예정 |
-| Day 24 | 7/23 (수) | 예정      | - ✅ 최종 Vercel 배포<br>- README 최종 정리<br>- 기술 블로그 작성 마무리                                                            | ⏳ 예정 |
+| Day 11 | 7/8 (화)  | 7/8 (화)  | - ResultMonthly 기능 연동<br>- 감정 정렬 로직 개선<br>- 색상 매핑 정리 및 도넛 UI 개선                                              | ✅ 완료 |
+| Day 12 | 7/9 (수)  | 7/9 (수)  | - 감정 도넛 정리 마무리<br>- 정렬 기준(퍼센트 → 가나다) 반영<br>- actions 개선 및 UI 테스트                                         | ✅ 완료 |
+| Day 13 | 7/10 (목) | 7/10 (목) | - 화면 설계 이미지 기준 구조 완성<br>- 전체 흐름 일치 여부 점검<br>- GPT 응답 리팩토링                                              | ✅ 완료 |
+| Day 14 | 7/11 (금) | 7/11 (금) | - EmotionChart 구조 개선<br>- 감정 색상 로직 정리<br>- actions 배열화 및 시각화 기획 반영                                           | ✅ 완료 |
+| Day 15 | 7/14 (월) | 7/14 (월) | - Result 구조 통일<br>- CalendarView 버튼 UX 개선<br>- 감정 레이아웃 정리                                                           | ✅ 완료 |
+| Day 16 | 7/15 (화) | 7/15 (화) | - WriteWelcome 화면 설계/구현<br>- 일기 리스트 접힘/펼침 UI<br>- Supabase actions 컬럼 배열화                                       | ✅ 완료 |
+| Day 17 | 7/16 (수) | 예정      | - Supabase 저장 로직 정비<br>- 캘린더에서 열람 흐름 연결<br>- `result-daily` 연동 준비                                              | ⏳ 예정 |
+| Day 18 | 7/17 (목) | 예정      | - DiaryWrite / ResultDaily UI 리팩토링 Day 1<br>- 모바일 대응 구조 정리                                                             | ⏳ 예정 |
+| Day 19 | 7/18 (금) | 예정      | - DiaryWrite / ResultDaily UI 리팩토링 Day 2<br>- 열람 기능 기능 연동 시작                                                          | ⏳ 예정 |
+| Day 20 | 7/21 (월) | 예정      | - CalendarView, ResultMonthly, Login 등 전체 레이아웃 통일<br>- 홈 버튼 연결                                                        | ⏳ 예정 |
+| Day 21 | 7/22 (화) | 예정      | - UI 전수 QA (모바일/데스크탑 대응)<br>- console.log 제거                                                                           | ⏳ 예정 |
+| Day 22 | 7/23 (수) | 예정      | - ✅ 최종 Vercel 배포<br>- README 최종 정리<br>- 기술 블로그 작성 마무리                                                            | ⏳ 예정 |

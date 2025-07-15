@@ -1,9 +1,11 @@
-// 📍 src/pages/DiaryWrite.jsx
+// 📍 src/pages/DiaryWrite.jsx (Supabase 저장 로직 포함)
 
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { summarizeWithGPT } from "../lib/openai";
 import { extractSection } from "../lib/extractSection";
+import { supabase } from "../lib/supabase";
+import { useAuth } from "../lib/useAuth";
 import LoadingDonut from "../components/LoadingDonut";
 
 // 감정 퍼센트 추출 함수
@@ -22,6 +24,7 @@ const DiaryWrite = () => {
   const [diaryText, setDiaryText] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const handleSubmit = async () => {
     if (!diaryText.trim()) return alert("일기를 입력해주세요.");
@@ -34,9 +37,29 @@ const DiaryWrite = () => {
       const summary = extractSection(gptResponse.raw, "📘");
       const feedback = extractSection(gptResponse.raw, "💬");
       const emotionText = extractSection(gptResponse.raw, "❤️");
-
       const parsedEmotions = parseEmotionPercentages(emotionText);
 
+      // ✅ Supabase 저장 로직 추가
+      const { error } = await supabase.from("summaries").insert([
+        {
+          user_id: user?.id,
+          date: new Date().toISOString().slice(0, 10),
+          content: diaryText,
+          summary,
+          feedback,
+          emotion: emotionText, // 원문 텍스트 저장
+          actions: gptResponse.actions, // string[] 타입 저장
+          month_summary: false,
+        },
+      ]);
+
+      if (error) {
+        console.error("❌ Supabase 저장 실패:", error);
+        alert("저장 중 오류가 발생했습니다.");
+        return;
+      }
+
+      // ✅ 저장 성공 후 결과 페이지로 이동
       navigate("/result-daily", {
         state: {
           emotions: parsedEmotions,

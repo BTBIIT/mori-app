@@ -6,7 +6,7 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import CalendarView from "./pages/CalendarView.jsx";
 import DiaryWrite from "./pages/DiaryWrite";
-import Chat from "./pages/Chat";
+import WriteWelcome from "./pages/WriteWelcome";
 
 // ✅ 테스트용 도넛 확인 페이지
 import TestLoading from "./pages/TestLoading.jsx";
@@ -45,10 +45,10 @@ function AppRoutes() {
           }
         />
         <Route
-          path="/chat"
+          path="/write-welcome"
           element={
             <PrivateRoute>
-              <Chat />
+              <WriteWelcome />
             </PrivateRoute>
           }
         />

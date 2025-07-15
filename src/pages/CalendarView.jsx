@@ -154,8 +154,9 @@ export default function CalendarView() {
         src="/logo192.png"
         alt="logo"
         className="w-10 h-10 absolute top-4 left-4 cursor-pointer"
-        onClick={() => navigate(-1)}
+        onClick={() => navigate("/")} // ← 여기만 수정
       />
+
       <div className="bg-white p-4 sm:p-6 lg:p-8 rounded-2xl shadow-md w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl">
         <div className="flex justify-between items-center mb-4">
           <ArrowButton direction="left" onClick={handlePrevMonth} />
