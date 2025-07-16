@@ -84,9 +84,9 @@ src/
 | Day 14 | 7/11 (금) | 7/11 (금) | - EmotionChart 구조 개선<br>- 감정 색상 로직 정리<br>- actions 배열화 및 시각화 기획 반영                                           | ✅ 완료 |
 | Day 15 | 7/14 (월) | 7/14 (월) | - Result 구조 통일<br>- CalendarView 버튼 UX 개선<br>- 감정 레이아웃 정리                                                           | ✅ 완료 |
 | Day 16 | 7/15 (화) | 7/15 (화) | - WriteWelcome 화면 설계/구현<br>- 일기 리스트 접힘/펼침 UI<br>- Supabase actions 컬럼 배열화                                       | ✅ 완료 |
-| Day 17 | 7/16 (수) | 예정      | - Supabase 저장 로직 정비<br>- 캘린더에서 열람 흐름 연결<br>- `result-daily` 연동 준비                                              | ⏳ 예정 |
-| Day 18 | 7/17 (목) | 예정      | - DiaryWrite / ResultDaily UI 리팩토링 Day 1<br>- 모바일 대응 구조 정리                                                             | ⏳ 예정 |
-| Day 19 | 7/18 (금) | 예정      | - DiaryWrite / ResultDaily UI 리팩토링 Day 2<br>- 열람 기능 기능 연동 시작                                                          | ⏳ 예정 |
-| Day 20 | 7/21 (월) | 예정      | - CalendarView, ResultMonthly, Login 등 전체 레이아웃 통일<br>- 홈 버튼 연결                                                        | ⏳ 예정 |
-| Day 21 | 7/22 (화) | 예정      | - UI 전수 QA (모바일/데스크탑 대응)<br>- console.log 제거                                                                           | ⏳ 예정 |
-| Day 22 | 7/23 (수) | 예정      | - ✅ 최종 Vercel 배포<br>- README 최종 정리<br>- 기술 블로그 작성 마무리                                                            | ⏳ 예정 |
+| Day 17 | 7/17 (목) | 예정      | - Supabase 저장 로직 정비<br>- 캘린더에서 열람 흐름 연결<br>- `result-daily` 연동 준비                                              | ⏳ 예정 |
+| Day 18 | 7/18 (금) | 예정      | - DiaryWrite / ResultDaily UI 리팩토링 Day 1<br>- 모바일 대응 구조 정리                                                             | ⏳ 예정 |
+| Day 19 | 7/21 (월) | 예정      | - DiaryWrite / ResultDaily UI 리팩토링 Day 2<br>- 열람 기능 기능 연동 시작                                                          | ⏳ 예정 |
+| Day 20 | 7/22 (화) | 예정      | - CalendarView, ResultMonthly, Login 등 전체 레이아웃 통일<br>- 홈 버튼 연결                                                        | ⏳ 예정 |
+| Day 21 | 7/23 (수) | 예정      | - UI 전수 QA (모바일/데스크탑 대응)<br>- console.log 제거                                                                           | ⏳ 예정 |
+| Day 22 | 7/24 (목) | 예정      | - ✅ 최종 Vercel 배포<br>- README 최종 정리<br>- 기술 블로그 작성 마무리                                                            | ⏳ 예정 |
