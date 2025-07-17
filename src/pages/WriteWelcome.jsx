@@ -1,19 +1,41 @@
 // 📁 src/pages/WriteWelcome.jsx
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../lib/useAuth";
+import { getSummariesByDate } from "../lib/summaryApi";
+
+// 감정 퍼센트 추출 함수
+const parseEmotionPercentages = (text) => {
+  const emotionRegex = /([가-힣]+)\s?(\d+(?:\.\d+)?)%/g;
+  const result = {};
+  let match;
+  while ((match = emotionRegex.exec(text)) !== null) {
+    const [_, emotion, percent] = match;
+    result[emotion] = parseFloat(percent);
+  }
+  return result;
+};
 
 export default function WriteWelcome() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [todaySummaries, setTodaySummaries] = useState([]);
+  const [expandedIndex, setExpandedIndex] = useState(null);
 
-  const hasTodayDiary = true; // ✅ 임시 UI 조건: 오늘 일기 있음 여부
-  const [showSummary, setShowSummary] = useState(false);
+  const today = new Date().toISOString().split("T")[0];
+
+  useEffect(() => {
+    const fetchTodaySummaries = async () => {
+      if (user?.id) {
+        const result = await getSummariesByDate(user.id, today);
+        setTodaySummaries(result);
+      }
+    };
+    fetchTodaySummaries();
+  }, [user]);
 
   return (
     <div className="w-screen min-h-screen overflow-x-hidden bg-[#A1D6B2] flex flex-col items-center justify-center px-4 py-8">
-      {/* 로고 클릭 시 로그아웃 처리 예정 */}
       <img
         src="/logo192.png"
         alt="로고"
@@ -21,43 +43,56 @@ export default function WriteWelcome() {
         onClick={() => navigate("/login")}
       />
 
-      {/* 카드 내용 */}
       <div className="bg-white rounded-2xl shadow-lg px-6 py-12 text-center w-[90%] sm:w-[85%] max-w-md">
         <p className="text-xl font-semibold mb-6 break-words">
           {user?.email ?? "User"} 님!
         </p>
 
-        {hasTodayDiary ? (
+        {todaySummaries.length > 0 ? (
           <div className="space-y-6">
-            {/* 오늘 작성된 일기 항목 */}
-            <div
-              className="bg-gradient-to-br from-[#E6F4EA] to-[#D3ECD8] rounded-2xl px-6 py-4 shadow-sm text-left space-y-2 cursor-pointer transition hover:scale-[1.01]"
-              onClick={() => setShowSummary(!showSummary)}
-            >
-              <p className="text-sm text-[#3D6A50] font-semibold tracking-wide">
-                첫 번째 작성된 일기
-              </p>
-
-              {showSummary && (
-                <div className="mt-2">
-                  <p className="text-xs text-[#5C8C6A] mb-1">오늘의 요약</p>
-                  <p className="text-sm text-[#2F4F3D] leading-relaxed">
-                    친구들과 맛있는 음식을 먹고 카페에서 수다를 떨며 즐거운
-                    시간을 보냈고, 날씨도 좋아서 하루 내내 기분이 좋았어요.
+            {todaySummaries.map((summary, idx) => {
+              const parsedEmotions = parseEmotionPercentages(summary.emotion);
+              return (
+                <div
+                  key={summary.id}
+                  className="bg-gradient-to-br from-[#E6F4EA] to-[#D3ECD8] rounded-2xl px-6 py-4 shadow-sm text-left space-y-2 cursor-pointer transition hover:scale-[1.01]"
+                  onClick={() =>
+                    setExpandedIndex(expandedIndex === idx ? null : idx)
+                  }
+                >
+                  <p className="text-sm text-[#3D6A50] font-semibold tracking-wide">
+                    {`${idx + 1}번째 작성된 일기`}
                   </p>
-                  <div className="flex justify-end mt-2">
-                    <button
-                      className="text-sm px-4 py-1 rounded-full border-2 border-transparent bg-[#A1D6B2] text-black font-semibold hover:border-[#00A0FF] active:border-[#E8B86D]"
-                      onClick={() => {}}
-                    >
-                      열람하기
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
 
-            {/* ✅ 일기 추가 버튼 */}
+                  {expandedIndex === idx && (
+                    <div className="mt-2">
+                      <p className="text-xs text-[#5C8C6A] mb-1">오늘의 요약</p>
+                      <p className="text-sm text-[#2F4F3D] leading-relaxed whitespace-pre-line">
+                        {summary.summary}
+                      </p>
+                      <div className="flex justify-end mt-2">
+                        <button
+                          className="text-sm px-4 py-1 rounded-full border-2 border-transparent bg-[#A1D6B2] text-black font-semibold hover:border-[#00A0FF] active:border-[#E8B86D]"
+                          onClick={() =>
+                            navigate("/result-daily", {
+                              state: {
+                                summary: summary.summary,
+                                feedback: summary.feedback,
+                                emotions: parsedEmotions,
+                                actions: summary.actions || [],
+                              },
+                            })
+                          }
+                        >
+                          열람하기
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+
             <div className="mt-4">
               <img
                 src="/plus-icon.png"

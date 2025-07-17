@@ -4,7 +4,6 @@ import {
   getSummariesByMonth,
   getSummariesByDate,
   deleteSummary,
-  updateSummary,
 } from "../lib/summaryApi";
 import { useNavigate } from "react-router-dom";
 
@@ -17,8 +16,6 @@ export default function CalendarView() {
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
   const [showYearModal, setShowYearModal] = useState(false);
-  const [editingSummaryId, setEditingSummaryId] = useState(null);
-  const [editingContent, setEditingContent] = useState("");
   const navigate = useNavigate();
 
   const yearOptions = Array.from(
@@ -96,54 +93,11 @@ export default function CalendarView() {
 
   const closeModal = () => {
     setSelectedDate(null);
-    setEditingSummaryId(null);
-    setEditingContent("");
   };
 
-  const ArrowButton = ({ direction, onClick }) => (
-    <button
-      onClick={onClick}
-      className="w-8 h-8 sm:w-10 sm:h-10 aspect-square p-0 rounded-full flex items-center justify-center border-2 transition focus:outline-none"
-      style={{
-        backgroundColor: "#A1D6B2",
-        borderColor: "transparent",
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = "#00A0FF";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = "transparent";
-      }}
-    >
-      <svg
-        width="120"
-        height="150"
-        viewBox="0 0 100 100"
-        fill="#E8B86D"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        {direction === "left" ? (
-          <polygon
-            points="65,20 35,50 65,80"
-            fill="#E8B86D"
-            stroke="#E8B86D"
-            strokeWidth="2"
-            strokeLinejoin="round"
-            rx="2"
-          />
-        ) : (
-          <polygon
-            points="35,20 65,50 35,80"
-            fill="#E8B86D"
-            stroke="#E8B86D"
-            strokeWidth="2"
-            strokeLinejoin="round"
-            rx="2"
-          />
-        )}
-      </svg>
-    </button>
-  );
+  const handleView = (summaryId) => {
+    navigate(`/result-daily?id=${summaryId}`);
+  };
 
   return (
     <div
@@ -154,12 +108,12 @@ export default function CalendarView() {
         src="/logo192.png"
         alt="logo"
         className="w-10 h-10 absolute top-4 left-4 cursor-pointer"
-        onClick={() => navigate("/")} // ← 여기만 수정
+        onClick={() => navigate("/")}
       />
 
       <div className="bg-white p-4 sm:p-6 lg:p-8 rounded-2xl shadow-md w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl">
         <div className="flex justify-between items-center mb-4">
-          <ArrowButton direction="left" onClick={handlePrevMonth} />
+          <button onClick={handlePrevMonth}>◀</button>
           <div className="text-center">
             <div
               className="text-2xl font-bold cursor-pointer"
@@ -172,7 +126,7 @@ export default function CalendarView() {
               {currentMonth + 1}월
             </div>
           </div>
-          <ArrowButton direction="right" onClick={handleNextMonth} />
+          <button onClick={handleNextMonth}>▶</button>
         </div>
 
         <div
@@ -285,14 +239,23 @@ export default function CalendarView() {
                 className="border rounded p-3 mb-2 overflow-y-auto"
                 style={{
                   borderColor: "#00A0FF",
-                  backgroundColor:
-                    editingSummaryId === entry.id ? "#F9F9F9" : "#FFFFFF",
+                  backgroundColor: "#FFFFFF",
                   maxHeight: "200px",
                   scrollbarColor: "#E8B86D #f0f0f0",
                 }}
               >
                 <p>{entry.content}</p>
                 <div className="flex justify-end gap-2 mt-2">
+                  <button
+                    className="px-3 py-1 rounded border text-sm"
+                    style={{
+                      backgroundColor: "#E8B86D",
+                      borderColor: "#00A0FF",
+                    }}
+                    onClick={() => handleView(entry.id)}
+                  >
+                    열람하기
+                  </button>
                   <button
                     className="px-3 py-1 rounded border text-sm"
                     style={{

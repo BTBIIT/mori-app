@@ -42,6 +42,8 @@ export async function saveSummary({
   summary,
   feedback,
   emotion,
+  actions,
+  month_summary,
 }) {
   const { data, error } = await supabase.from("summaries").insert([
     {
@@ -51,6 +53,8 @@ export async function saveSummary({
       summary,
       feedback,
       emotion,
+      actions,
+      month_summary,
     },
   ]);
 
@@ -68,7 +72,7 @@ export async function saveSummary({
 export async function getSummariesByDate(userId, date) {
   const { data, error } = await supabase
     .from("summaries")
-    .select("id, content, summary, feedback, emotion, date")
+    .select("id, content, summary, feedback, emotion, actions, date")
     .eq("user_id", userId)
     .eq("date", date);
 
@@ -105,5 +109,21 @@ export async function updateSummary(id, updatedData) {
     console.error("❌ 수정 오류:", error);
     throw error;
   }
+  return data;
+}
+
+// 📄 특정 ID의 요약 하나만 조회
+export async function getSummaryById(id) {
+  const { data, error } = await supabase
+    .from("summaries")
+    .select("id, content, summary, feedback, emotion, actions, date")
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    console.error("❌ ID로 요약 조회 오류:", error);
+    return null;
+  }
+
   return data;
 }
