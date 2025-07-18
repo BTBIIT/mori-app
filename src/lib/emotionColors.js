@@ -9,7 +9,7 @@ export const emotionColors = {
   설렘: "#FFE3BA",
   사랑: "#FFCCDA",
   희망: "#FFEABF",
-
+  열정: "#d91717ff",
   슬픔: "#AFCBFF",
   우울: "#B2A4FF",
   불안: "#C7B8FF",
@@ -25,7 +25,7 @@ export const emotionColors = {
   차분: "#CDEBE4",
   휴식: "#C9F9F1",
   여유: "#DEFBE6",
-
+  기대: "#61df84ff",
   애증: "#FAD689",
   미련: "#FFE4C9",
   집착: "#FFE27A",
@@ -59,6 +59,7 @@ const emotionCategoryMap = {
     "만족",
     "반가움",
     "흥미",
+    "열정",
   ],
   negative: [
     "슬픔",
@@ -76,6 +77,7 @@ const emotionCategoryMap = {
     "두려움",
     "공포",
     "상처",
+    "걱정",
   ],
   peaceful: ["평온", "안정", "차분", "휴식", "여유", "편안", "안도", "이해"],
   complex: [
@@ -90,6 +92,7 @@ const emotionCategoryMap = {
     "의문",
     "사색",
     "긴장",
+    "기대",
   ],
 };
 

@@ -1,4 +1,4 @@
-// 📍 src/pages/DiaryWrite.jsx (Supabase 저장 로직 포함)
+// 📍 src/pages/DiaryWrite.jsx (버튼 테두리만 상태 변화, textarea 테두리 고정)
 
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +8,6 @@ import { supabase } from "../lib/supabase";
 import { useAuth } from "../lib/useAuth";
 import LoadingDonut from "../components/LoadingDonut";
 
-// 감정 퍼센트 추출 함수
 const parseEmotionPercentages = (text) => {
   const emotionRegex = /([가-힣]+)\s?(\d+(?:\.\d+)?)%/g;
   const result = {};
@@ -32,14 +31,11 @@ const DiaryWrite = () => {
     setLoading(true);
     try {
       const gptResponse = await summarizeWithGPT(diaryText);
-      console.log("🧪 GPT 전체 응답:", gptResponse);
-
       const summary = extractSection(gptResponse.raw, "📘");
       const feedback = extractSection(gptResponse.raw, "💬");
       const emotionText = extractSection(gptResponse.raw, "❤️");
       const parsedEmotions = parseEmotionPercentages(emotionText);
 
-      // ✅ Supabase 저장 로직 추가
       const { error } = await supabase.from("summaries").insert([
         {
           user_id: user?.id,
@@ -47,8 +43,8 @@ const DiaryWrite = () => {
           content: diaryText,
           summary,
           feedback,
-          emotion: emotionText, // 원문 텍스트 저장
-          actions: gptResponse.actions, // string[] 타입 저장
+          emotion: emotionText,
+          actions: gptResponse.actions,
           month_summary: false,
         },
       ]);
@@ -59,7 +55,6 @@ const DiaryWrite = () => {
         return;
       }
 
-      // ✅ 저장 성공 후 결과 페이지로 이동
       navigate("/result-daily", {
         state: {
           emotions: parsedEmotions,
@@ -83,20 +78,29 @@ const DiaryWrite = () => {
   }
 
   return (
-    <div className="max-w-xl mx-auto p-6 space-y-6">
-      <h2 className="text-2xl font-bold mb-4">오늘의 일기</h2>
-      <textarea
-        className="w-full h-40 p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#A1D6B2] resize-none text-sm custom-scroll"
-        placeholder="오늘 하루 어땠는지 적어주세요..."
-        value={diaryText}
-        onChange={(e) => setDiaryText(e.target.value)}
+    <div className="w-screen min-h-screen bg-[#A1D6B2] flex justify-center items-center px-4 py-12 overflow-x-hidden relative">
+      <img
+        src="/logo192.png"
+        alt="Mori Logo"
+        className="w-12 h-12 mb-4 self-start cursor-pointer absolute top-6 left-6"
+        onClick={() => navigate(-1)}
       />
-      <button
-        onClick={handleSubmit}
-        className="w-full bg-[#A1D6B2] hover:bg-[#8ecfa7] text-white font-semibold py-2 rounded-lg shadow"
-      >
-        모리 요약하기
-      </button>
+
+      <div className="w-full max-w-[960px] mx-auto bg-white rounded-2xl shadow-md p-6 sm:p-8">
+        <h2 className="text-xl font-semibold mb-4 text-center">오늘의 일기</h2>
+        <textarea
+          className="w-full min-h-[14rem] sm:min-h-[16rem] md:min-h-[20rem] p-4 bg-white rounded-xl border border-gray-200 resize-none text-base placeholder-gray-400 focus:outline-none"
+          placeholder="오늘 하루 어땠는지 자유롭게 적어주세요 :)"
+          value={diaryText}
+          onChange={(e) => setDiaryText(e.target.value)}
+        />
+        <button
+          onClick={handleSubmit}
+          className="w-full bg-[#A1D6B2] text-white font-bold py-3 rounded-full mt-6 shadow-md border-2 border-[#A1D6B2] hover:border-[#00A0FF] active:border-[#E8B86D] transition-colors duration-200"
+        >
+          모리 요약하기
+        </button>
+      </div>
     </div>
   );
 };
