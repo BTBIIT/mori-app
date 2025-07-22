@@ -93,11 +93,12 @@ export default function WriteWelcome() {
               );
             })}
 
+            {/* + 로고 적용 / button 사용하지 않고 파란 테두리 제거 */}
             <div className="mt-4">
               <img
-                src="/plus-icon.png"
+                src="/MoriPlus.svg"
                 alt="일기 추가"
-                className="w-12 h-12 mx-auto my-4 cursor-pointer"
+                className="w-28 h-28 mx-auto my-4 cursor-pointer transition hover:scale-105 active:scale-95"
                 onClick={() => navigate("/diarywrite")}
               />
             </div>
@@ -107,12 +108,14 @@ export default function WriteWelcome() {
             <p className="text-base font-medium leading-relaxed text-gray-700">
               현재 적혀있는 일기가 존재하지 않아요.
             </p>
-            <img
-              src="/plus-icon.png"
-              alt="작성하기"
-              className="w-12 h-12 mx-auto my-6 cursor-pointer"
-              onClick={() => navigate("/diarywrite")}
-            />
+            <div className="flex justify-center mt-4">
+              <img
+                src="/MoriPlus.svg"
+                alt="일기 추가"
+                className="w-28 h-28 object-contain block"
+                onClick={() => navigate("/diarywrite")}
+              />
+            </div>
           </>
         )}
 

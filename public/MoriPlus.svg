@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 512 512"
+  preserveAspectRatio="xMidYMid meet"
+>
+  <circle cx="256" cy="256" r="200" fill="#A1D6B2" />
+  <rect x="106" y="216" width="300" height="80" fill="white" rx="20" ry="20"/>
+  <rect x="216" y="106" width="80" height="300" fill="white" rx="20" ry="20"/>
+</svg>

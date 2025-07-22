@@ -78,6 +78,7 @@ const emotionCategoryMap = {
     "공포",
     "상처",
     "걱정",
+    "나쁨",
   ],
   peaceful: ["평온", "안정", "차분", "휴식", "여유", "편안", "안도", "이해"],
   complex: [
@@ -93,6 +94,7 @@ const emotionCategoryMap = {
     "사색",
     "긴장",
     "기대",
+    "황당함",
   ],
 };
 
