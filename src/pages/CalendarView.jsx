@@ -89,6 +89,15 @@ export default function CalendarView() {
     await deleteSummary(id);
     const results = await getSummariesByDate(user.id, selectedDate);
     setSummariesForSelectedDate(results);
+
+    // ✅ 수정된 부분: summaryDates도 갱신
+    const updatedDates = await getSummariesByMonth(
+      user.id,
+      currentYear,
+      currentMonth
+    );
+    const daysOnly = updatedDates.map((d) => parseInt(d.split("-")[2]));
+    setSummaryDates(daysOnly);
   };
 
   const closeModal = () => {
@@ -101,7 +110,7 @@ export default function CalendarView() {
 
   return (
     <div
-      className="min-h-screen flex flex-col items-center py-8 px-2"
+      className="min-h-screen flex flex-col items-center py-8 px-2 overflow-x-hidden"
       style={{ backgroundColor: "#A1D6B2" }}
     >
       <img
@@ -111,67 +120,102 @@ export default function CalendarView() {
         onClick={() => navigate("/")}
       />
 
-      <div className="bg-white p-4 sm:p-6 lg:p-8 rounded-2xl shadow-md w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl">
-        <div className="flex justify-between items-center mb-4">
-          <button onClick={handlePrevMonth}>◀</button>
-          <div className="text-center">
-            <div
-              className="text-2xl font-bold cursor-pointer"
-              style={{ color: "#A1D6B2" }}
-              onClick={() => setShowYearModal(true)}
+      <div className="w-full px-2">
+        <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-md w-full max-w-sm mx-auto">
+          <div className="flex justify-between items-center mb-4">
+            <button
+              onClick={handlePrevMonth}
+              className="text-2xl font-bold rounded-full bg-white w-10 h-10 flex items-center justify-center border-2 transition"
+              style={{ color: "#E8B86D" }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.borderColor = "#00A0FF")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.borderColor = "#ffffff")
+              }
             >
-              {currentYear}
-            </div>
-            <div style={{ color: "#A1D6B2" }} className="text-xl">
-              {currentMonth + 1}월
-            </div>
-          </div>
-          <button onClick={handleNextMonth}>▶</button>
-        </div>
+              ◀
+            </button>
 
-        <div
-          className="grid grid-cols-7 text-center mb-2 font-semibold text-sm sm:text-base md:text-lg"
-          style={{ color: "#A1D6B2" }}
-        >
-          {["일", "월", "화", "수", "목", "금", "토"].map((day) => (
-            <div key={day}>{day}</div>
-          ))}
-        </div>
-
-        <div className="grid grid-cols-7 gap-y-2">
-          {getCalendarDates().map(({ day, type }, i) => {
-            const isSummaryDay =
-              type === "current" && summaryDates.includes(day);
-            return (
+            <div className="text-center">
               <div
-                key={`${type}-${day}-${i}`}
-                className={`w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full cursor-pointer text-sm sm:text-base md:text-lg ${
-                  isSummaryDay ? "bg-blue-300 text-white font-bold" : ""
-                }`}
-                style={{ color: type === "current" ? "#A1D6B2" : "#E8B86D" }}
-                onClick={() => handleDateClick(day, type)}
+                className="text-2xl font-bold cursor-pointer"
+                style={{ color: "#A1D6B2" }}
+                onClick={() => setShowYearModal(true)}
               >
-                {day}
+                {currentYear}
               </div>
-            );
-          })}
-        </div>
+              <div style={{ color: "#A1D6B2" }} className="text-xl">
+                {currentMonth + 1}월
+              </div>
+            </div>
 
-        <button
-          className="mt-6 w-full text-black font-semibold py-2 px-4 rounded transition border-2 border-transparent"
-          style={{ backgroundColor: "#A1D6B2" }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = "#00A0FF";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = "transparent";
-          }}
-          onClick={() => navigate("/result-monthly")}
-        >
-          이번 달 요약 하기
-        </button>
+            <button
+              onClick={handleNextMonth}
+              className="text-2xl font-bold rounded-full bg-white w-10 h-10 flex items-center justify-center border-2 transition"
+              style={{ color: "#E8B86D" }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.borderColor = "#00A0FF")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.borderColor = "#ffffff")
+              }
+            >
+              ▶
+            </button>
+          </div>
+
+          <div
+            className="grid grid-cols-7 text-center mb-2 font-semibold text-sm sm:text-base md:text-lg"
+            style={{ color: "#A1D6B2" }}
+          >
+            {["일", "월", "화", "수", "목", "금", "토"].map((day) => (
+              <div key={day}>{day}</div>
+            ))}
+          </div>
+
+          <div
+            className="grid grid-cols-7 gap-y-2"
+            key={summaryDates.join("-")}
+          >
+            {getCalendarDates().map(({ day, type }, i) => {
+              const isSummaryDay =
+                type === "current" && summaryDates.includes(day);
+              return (
+                <div
+                  key={`${type}-${day}-${i}`}
+                  className={`flex items-center justify-center rounded-full cursor-pointer text-sm sm:text-base md:text-lg aspect-square ${
+                    isSummaryDay ? "bg-blue-300 text-white font-bold" : ""
+                  }`}
+                  style={{
+                    color: type === "current" ? "#A1D6B2" : "#E8B86D",
+                    minWidth: 0,
+                  }}
+                  onClick={() => handleDateClick(day, type)}
+                >
+                  {day}
+                </div>
+              );
+            })}
+          </div>
+
+          <button
+            className="mt-6 w-full text-black font-semibold py-2 px-4 rounded transition border-2 border-transparent"
+            style={{ backgroundColor: "#A1D6B2" }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = "#00A0FF";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = "transparent";
+            }}
+            onClick={() => navigate("/result-monthly")}
+          >
+            이번 달 요약 하기
+          </button>
+        </div>
       </div>
 
+      {/* 연도 선택 모달 */}
       {showYearModal && (
         <div
           className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50"
@@ -214,6 +258,7 @@ export default function CalendarView() {
         </div>
       )}
 
+      {/* 일간 요약 모달 */}
       {selectedDate && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div

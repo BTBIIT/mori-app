@@ -21,9 +21,13 @@ const ResultMonthly = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let isMounted = true; // ✅ 중복 방지 플래그
+
     const fetchMonthlySummary = async () => {
       try {
         const user = (await supabase.auth.getUser()).data.user;
+        if (!user || !isMounted) return;
+
         const today = new Date();
         const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1)
           .toISOString()
@@ -46,8 +50,10 @@ const ResultMonthly = () => {
 
         if (error) throw error;
         if (!entries || entries.length === 0) {
-          setSummary("이번 달 작성된 일기가 없습니다.");
-          setLoading(false);
+          if (isMounted) {
+            setSummary("이번 달 작성된 일기가 없습니다.");
+            setLoading(false);
+          }
           return;
         }
 
@@ -64,19 +70,29 @@ const ResultMonthly = () => {
               return a[0].localeCompare(b[0], "ko");
             });
 
-        setSummary(result.summary || "");
-        setFeedback(result.feedback || "");
-        setActions(result.actions || []);
-        setEmotions(sortedEmotions);
+        if (isMounted) {
+          setSummary(result.summary || "");
+          setFeedback(result.feedback || "");
+          setActions(result.actions || []);
+          setEmotions(sortedEmotions);
+        }
       } catch (err) {
         console.error("🔥 월간 요약 처리 오류:", err);
-        setSummary("요약 중 오류가 발생했습니다.");
+        if (isMounted) {
+          setSummary("요약 중 오류가 발생했습니다.");
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
     fetchMonthlySummary();
+
+    return () => {
+      isMounted = false; // ✅ cleanup 시 재렌더 방지
+    };
   }, []);
 
   if (loading) {
