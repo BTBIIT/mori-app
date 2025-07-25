@@ -1,5 +1,3 @@
-// 📁 src/pages/ResultMonthly.jsx
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import EmotionChart from "../components/EmotionChart";
@@ -21,7 +19,7 @@ const ResultMonthly = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let isMounted = true; // ✅ 중복 방지 플래그
+    let isMounted = true;
 
     const fetchMonthlySummary = async () => {
       try {
@@ -63,12 +61,10 @@ const ResultMonthly = () => {
 
         const result = await summarizeWithGPT(allText, "monthly");
 
-        const sortedEmotions = Array.isArray(result.emotion)
-          ? result.emotion
-          : Object.entries(result.emotion || {}).sort((a, b) => {
-              if (a[1] !== b[1]) return b[1] - a[1];
-              return a[0].localeCompare(b[0], "ko");
-            });
+        const sortedEmotions =
+          Array.isArray(result.emotion) && result.emotion.length > 0
+            ? result.emotion
+            : [];
 
         if (isMounted) {
           setSummary(result.summary || "");
@@ -89,66 +85,82 @@ const ResultMonthly = () => {
     };
 
     fetchMonthlySummary();
-
     return () => {
-      isMounted = false; // ✅ cleanup 시 재렌더 방지
+      isMounted = false;
     };
   }, []);
 
   if (loading) {
     return (
-      <div className="py-20">
-        <LoadingDonut
-          textLines={[
-            "모리가 이번달 일기를",
-            "읽고 있어요",
-            "잠시 후 결과를 알려드릴게요",
-          ]}
-        />
+      <div className="min-h-screen bg-[#A1D6B2] flex flex-col">
+        <div className="pt-6 pl-6">
+          <img src="/logo192.png" alt="Mori 로고" className="w-10 h-10" />
+        </div>
+        <div className="flex flex-1 items-center justify-center">
+          <LoadingDonut
+            textLines={[
+              "이번달 감정을 정리 중이에요.",
+              "곧 결과를 보여드릴게요.",
+            ]}
+          />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-xl mx-auto p-6 space-y-6">
-      <h2 className="text-2xl font-semibold mb-2">📘 이번 달 요약</h2>
-      <p className="bg-white text-sm p-4 rounded-xl shadow text-gray-800 whitespace-pre-line">
-        {summary}
-      </p>
+    <div className="min-h-screen w-screen bg-[#A1D6B2] px-4 py-8 flex justify-center overflow-x-hidden relative">
+      <div className="w-full max-w-xl bg-white rounded-2xl shadow-md p-6 space-y-6">
+        <img
+          src="/logo192.png"
+          alt="Mori Logo"
+          className="w-12 h-12 mb-2 cursor-pointer absolute top-6 left-6"
+          onClick={() => navigate(-1)}
+        />
 
-      <h2 className="text-xl font-semibold mt-6">❤️ 감정 분석</h2>
-      <EmotionChart data={emotions} />
+        <h2 className="text-2xl font-semibold">📘 이번 달 요약</h2>
+        <p className="text-gray-700 text-sm bg-white rounded-xl p-4 shadow whitespace-pre-line">
+          {summary || "(데이터 없음)"}
+        </p>
 
-      <div className="bg-green-50 p-4 rounded-xl shadow text-gray-800 text-sm">
-        <div className="flex items-center gap-2 mb-1">
-          <img src="/logo512.png" alt="한마디" className="w-5 h-5" />
-          <h3 className="font-semibold">모리의 한마디</h3>
-        </div>
-        <p>{feedback}</p>
-      </div>
+        <h2 className="text-xl font-semibold mt-6">❤️ 감정 분석</h2>
+        {emotions.length > 0 ? (
+          <EmotionChart data={emotions} />
+        ) : (
+          <p className="text-sm text-gray-500">(감정 분석 데이터 없음)</p>
+        )}
 
-      {actions.length > 0 && (
-        <div className="bg-white border rounded-lg p-4 shadow-sm">
-          <div className="flex items-center gap-2 mb-2">
-            <h3 className="font-semibold">💡모리의 행동 추천</h3>
+        <div className="bg-green-50 p-4 rounded-xl shadow text-gray-800 text-sm">
+          <div className="flex items-center gap-2 mb-1">
+            <img src="/logo192.png" alt="한마디" className="w-5 h-5" />
+            <h3 className="font-semibold">모리의 한마디</h3>
           </div>
-          <ul className="text-sm space-y-1">
-            {actions.map((a, idx) => (
-              <li key={idx} className="flex items-start gap-2">
-                <span className="text-green-500">✅</span>
-                <span>{a}</span>
-              </li>
-            ))}
-          </ul>
+          <p>{feedback || "(내용 없음)"}</p>
         </div>
-      )}
 
-      <button
-        onClick={() => navigate("/calendarview")}
-        className="mt-6 w-full bg-[#A1D6B2] hover:bg-[#8ecfa7] text-white font-semibold py-2 rounded-lg shadow-md hover:scale-105 transition-transform"
-      >
-        달력으로 돌아가기
-      </button>
+        {actions?.length > 0 && (
+          <div className="bg-white border rounded-lg p-4 shadow-sm">
+            <div className="flex items-center gap-2 mb-2">
+              <h3 className="font-semibold">💡모리의 행동 추천</h3>
+            </div>
+            <ul className="text-sm space-y-1">
+              {actions.map((a, idx) => (
+                <li key={idx} className="flex items-start gap-2">
+                  <span className="text-green-500">✅</span>
+                  <span>{a}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <button
+          onClick={() => navigate("/calendarview")}
+          className="mt-6 w-full bg-[#A1D6B2] text-white font-semibold py-2 rounded-lg shadow-md border-2 border-[#A1D6B2] hover:border-[#00A0FF] active:border-[#E8B86D] transition-colors duration-200"
+        >
+          달력으로 돌아가기
+        </button>
+      </div>
     </div>
   );
 };

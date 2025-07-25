@@ -8,7 +8,7 @@ function parseEmotionLine(line) {
   const chunks = line.split(/,|\n/); // 쉼표 또는 줄바꿈 기준으로 자름
 
   for (let chunk of chunks) {
-    const match = chunk.match(/([가-힣]+)[\s:：-]*(\d+(\.\d+)?)/);
+    const match = chunk.match(/[-•\s]*([가-힣]+)\s*[:：]?\s*(\d+(\.\d+)?)/);
     if (match) {
       const emotion = match[1].trim();
       const value = parseFloat(match[2]);
@@ -79,8 +79,8 @@ export async function summarizeWithGPT(inputText, type = "daily") {
 
     const emotionMatch =
       type === "monthly"
-        ? content.match(/📊 감정 분포 요약:\s*(.*)/)
-        : content.match(/❤️ 감정:\s*(.*)/);
+        ? content.match(/📊 감정 분포 요약:\s*([\s\S]+?)(?:💬|📝|✅|$)/)
+        : content.match(/❤️ 감정:\s*([\s\S]+?)(?:💬|📝|✅|$)/);
 
     const emotionRaw = emotionMatch ? emotionMatch[1].trim() : null;
     const emotionParsed =

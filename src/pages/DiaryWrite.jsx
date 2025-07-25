@@ -73,7 +73,19 @@ const DiaryWrite = () => {
 
   if (loading) {
     return (
-      <LoadingDonut text="모리가 일기를 읽고 있어요. 잠시 후 결과를 알려드릴게요." />
+      <div className="min-h-screen bg-[#A1D6B2] flex flex-col">
+        <div className="pt-6 pl-6">
+          <img src="/logo192.png" alt="Mori 로고" className="w-10 h-10" />
+        </div>
+        <div className="flex flex-1 items-center justify-center">
+          <LoadingDonut
+            textLines={[
+              "모리가 일기를 요약 중이에요.",
+              "잠시 후 결과를 보여드릴게요.",
+            ]}
+          />
+        </div>
+      </div>
     );
   }
 

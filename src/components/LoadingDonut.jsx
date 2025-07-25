@@ -2,9 +2,9 @@ import React from "react";
 
 const LoadingDonut = ({ text = null, textLines = [] }) => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[300px]">
-      <div className="relative w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64">
-        {/* 회전 도넛 */}
+    <div className="bg-white rounded-2xl py-16 px-6 shadow-lg w-[92%] max-w-[500px] min-h-[80vh] flex flex-col items-center justify-center">
+      {/* 도넛 */}
+      <div className="relative w-[60vw] max-w-[320px] aspect-square">
         <div
           className="absolute inset-0 rounded-full animate-spin-slow z-0"
           style={{
@@ -15,14 +15,14 @@ const LoadingDonut = ({ text = null, textLines = [] }) => {
               "radial-gradient(closest-side, transparent 60%, black 61%)",
           }}
         />
-
-        {/* 도넛 중앙 텍스트 */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center z-10 text-center px-4 text-sm sm:text-base font-medium text-gray-700 leading-snug">
-          {textLines.length > 0 ? (
-            textLines.map((line, i) => <div key={i}>{line}</div>)
-          ) : (
-            <div>{text}</div>
-          )}
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-10 text-center px-3">
+          <div className="text-[10px] sm:text-xs md:text-sm leading-[1.2] text-gray-700 font-medium translate-y-[-4px]">
+            {textLines.length > 0 ? (
+              textLines.map((line, i) => <div key={i}>{line}</div>)
+            ) : (
+              <div>{text}</div>
+            )}
+          </div>
         </div>
       </div>
     </div>

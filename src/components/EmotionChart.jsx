@@ -7,7 +7,9 @@ const EmotionChart = ({ data }) => {
   // ✅ 배열 여부 확인 및 빈 데이터 처리
   if (!Array.isArray(data) || data.length === 0) {
     return (
-      <p className="text-center text-gray-500">감정 분석 데이터가 없습니다.</p>
+      <p className="text-center text-gray-500">
+        감정 분석 결과가 충분하지 않아 그래프를 표시할 수 없습니다.
+      </p>
     );
   }
 

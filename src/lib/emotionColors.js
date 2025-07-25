@@ -60,6 +60,7 @@ const emotionCategoryMap = {
     "반가움",
     "흥미",
     "열정",
+    "성장",
   ],
   negative: [
     "슬픔",
@@ -95,6 +96,7 @@ const emotionCategoryMap = {
     "긴장",
     "기대",
     "황당함",
+    "집중",
   ],
 };
 
@@ -142,5 +144,5 @@ export const getEmotionColor = (emotion) => {
     }
   }
 
-  return "#ccc"; // fallback
+  return "#A1D6B2"; // fallback
 };
