@@ -39,8 +39,6 @@ export async function summarizeWithGPT(inputText, type = "daily") {
   const prompt =
     type === "monthly" ? MONTHLY_SUMMARY_PROMPT : DAILY_SUMMARY_PROMPT;
 
-  console.log("📨 GPT 요청 내용:", inputText);
-
   try {
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -58,8 +56,6 @@ export async function summarizeWithGPT(inputText, type = "daily") {
       }),
     });
 
-    console.log("🔁 응답 상태 코드:", response.status);
-
     if (!response.ok) {
       const errorText = await response.text();
       console.error("❌ 요청 실패 상세:", errorText);
@@ -68,7 +64,6 @@ export async function summarizeWithGPT(inputText, type = "daily") {
 
     const data = await response.json();
     const content = data.choices[0].message.content.trim();
-    console.log("✅ GPT 응답:", content);
 
     // ✅ 항목별 파싱
     const summaryMatch = content.match(/📘 요약:\s*(.*)/);

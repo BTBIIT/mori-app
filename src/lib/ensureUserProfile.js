@@ -41,7 +41,6 @@ export async function ensureUserProfile() {
     if (insertError) {
       console.error("❌ user_profiles 등록 실패:", insertError.message);
     } else {
-      console.log("✅ user_profiles 등록 성공");
     }
   }
 }

@@ -8,7 +8,7 @@ const LoadingDonut = ({ text = null, textLines = [] }) => {
         <div
           className="absolute inset-0 rounded-full animate-spin-slow z-0"
           style={{
-            background: "conic-gradient(#A1D6B2, #E8B86D, #A1D6B2)",
+            background: "conic-gradient(#A1D6B2, #C79E5B, #A1D6B2)",
             maskImage:
               "radial-gradient(closest-side, transparent 60%, black 61%)",
             WebkitMaskImage:

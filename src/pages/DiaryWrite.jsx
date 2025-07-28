@@ -108,7 +108,7 @@ const DiaryWrite = () => {
         />
         <button
           onClick={handleSubmit}
-          className="w-full bg-[#A1D6B2] text-white font-bold py-3 rounded-full mt-6 shadow-md border-2 border-[#A1D6B2] hover:border-[#00A0FF] active:border-[#E8B86D] transition-colors duration-200"
+          className="w-full bg-[#A1D6B2] text-white font-bold py-3 rounded-full mt-6 shadow-md border-2 border-[#A1D6B2] hover:border-[#00A0FF] active:border-[#C79E5B] transition-colors duration-200"
         >
           모리 요약하기
         </button>

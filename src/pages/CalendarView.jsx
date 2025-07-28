@@ -126,7 +126,7 @@ export default function CalendarView() {
             <button
               onClick={handlePrevMonth}
               className="text-2xl font-bold rounded-full bg-white w-10 h-10 flex items-center justify-center border-2 transition"
-              style={{ color: "#E8B86D" }}
+              style={{ color: "#C79E5B" }}
               onMouseEnter={(e) =>
                 (e.currentTarget.style.borderColor = "#00A0FF")
               }
@@ -153,7 +153,7 @@ export default function CalendarView() {
             <button
               onClick={handleNextMonth}
               className="text-2xl font-bold rounded-full bg-white w-10 h-10 flex items-center justify-center border-2 transition"
-              style={{ color: "#E8B86D" }}
+              style={{ color: "#C79E5B" }}
               onMouseEnter={(e) =>
                 (e.currentTarget.style.borderColor = "#00A0FF")
               }
@@ -188,7 +188,7 @@ export default function CalendarView() {
                     isSummaryDay ? "bg-blue-300 text-white font-bold" : ""
                   }`}
                   style={{
-                    color: type === "current" ? "#A1D6B2" : "#E8B86D",
+                    color: type === "current" ? "#A1D6B2" : "#C79E5B",
                     minWidth: 0,
                   }}
                   onClick={() => handleDateClick(day, type)}
@@ -225,7 +225,7 @@ export default function CalendarView() {
             className="bg-white rounded-xl p-4 max-h-80 overflow-y-auto scroll-smooth w-40"
             onClick={(e) => e.stopPropagation()}
             style={{
-              scrollbarColor: "#E8B86D #ffffff",
+              scrollbarColor: "#C79E5B #ffffff",
               scrollbarWidth: "thin",
             }}
           >
@@ -286,7 +286,7 @@ export default function CalendarView() {
                   borderColor: "#00A0FF",
                   backgroundColor: "#FFFFFF",
                   maxHeight: "200px",
-                  scrollbarColor: "#E8B86D #f0f0f0",
+                  scrollbarColor: "#C79E5B #f0f0f0",
                 }}
               >
                 <p>{entry.content}</p>
@@ -294,7 +294,7 @@ export default function CalendarView() {
                   <button
                     className="px-3 py-1 rounded border text-sm"
                     style={{
-                      backgroundColor: "#E8B86D",
+                      backgroundColor: "#C79E5B",
                       borderColor: "#00A0FF",
                     }}
                     onClick={() => handleView(entry.id)}
@@ -304,7 +304,7 @@ export default function CalendarView() {
                   <button
                     className="px-3 py-1 rounded border text-sm"
                     style={{
-                      backgroundColor: "#E8B86D",
+                      backgroundColor: "#C79E5B",
                       borderColor: "#00A0FF",
                     }}
                     onClick={() => handleDelete(entry.id)}

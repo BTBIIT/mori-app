@@ -7,9 +7,6 @@ import Home from "./pages/Home";
 import CalendarView from "./pages/CalendarView.jsx";
 import DiaryWrite from "./pages/DiaryWrite";
 import WriteWelcome from "./pages/WriteWelcome";
-
-// ✅ 테스트용 도넛 확인 페이지
-import TestLoading from "./pages/TestLoading.jsx";
 // ✅ 월간 요약 결과 페이지
 import ResultMonthly from "./pages/ResultMonthly.jsx";
 // ✅ 일간 요약 결과 페이지 (추가!)
@@ -52,8 +49,6 @@ function AppRoutes() {
             </PrivateRoute>
           }
         />
-        {/* ✅ 테스트용 도넛 로딩 화면 */}
-        <Route path="/test-loading" element={<TestLoading />} />
 
         {/* ✅ 월간 요약 결과 페이지 */}
         <Route

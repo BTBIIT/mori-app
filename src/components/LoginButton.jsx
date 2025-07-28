@@ -18,7 +18,7 @@ export default function LoginButton() {
         e.currentTarget.style.backgroundColor = "transparent";
       }}
       onMouseDown={(e) => {
-        e.currentTarget.style.borderColor = "#E8B86D";
+        e.currentTarget.style.borderColor = "#C79E5B";
         e.currentTarget.style.backgroundColor = "#FFF7E0";
       }}
       onMouseUp={(e) => {

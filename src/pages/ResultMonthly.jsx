@@ -156,7 +156,7 @@ const ResultMonthly = () => {
 
         <button
           onClick={() => navigate("/calendarview")}
-          className="mt-6 w-full bg-[#A1D6B2] text-white font-semibold py-2 rounded-lg shadow-md border-2 border-[#A1D6B2] hover:border-[#00A0FF] active:border-[#E8B86D] transition-colors duration-200"
+          className="mt-6 w-full bg-[#A1D6B2] text-white font-semibold py-2 rounded-lg shadow-md border-2 border-[#A1D6B2] hover:border-[#00A0FF] active:border-[#C79E5B] transition-colors duration-200"
         >
           달력으로 돌아가기
         </button>

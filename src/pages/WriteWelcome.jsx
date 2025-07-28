@@ -72,7 +72,7 @@ export default function WriteWelcome() {
                       </p>
                       <div className="flex justify-end mt-2">
                         <button
-                          className="text-sm px-4 py-1 rounded-full border-2 border-transparent bg-[#A1D6B2] text-black font-semibold hover:border-[#00A0FF] active:border-[#E8B86D]"
+                          className="text-sm px-4 py-1 rounded-full border-2 border-transparent bg-[#A1D6B2] text-black font-semibold hover:border-[#00A0FF] active:border-[#C79E5B]"
                           onClick={() =>
                             navigate("/result-daily", {
                               state: {
@@ -130,7 +130,7 @@ export default function WriteWelcome() {
             e.currentTarget.style.backgroundColor = "#A1D6B2";
           }}
           onMouseDown={(e) => {
-            e.currentTarget.style.borderColor = "#E8B86D";
+            e.currentTarget.style.borderColor = "#C79E5B";
             e.currentTarget.style.backgroundColor = "#FFF7E0";
           }}
           onMouseUp={(e) => {

@@ -12,9 +12,6 @@ export async function getSummariesByMonth(userId, year, month) {
     lastDay
   ).padStart(2, "0")}`;
 
-  console.log("📦 fetch from:", start, "~", end);
-  console.log("👤 userId used:", userId);
-
   const { data, error } = await supabase
     .from("summaries")
     .select("date, user_id")
@@ -27,7 +24,6 @@ export async function getSummariesByMonth(userId, year, month) {
   }
 
   const filtered = data.filter((item) => item.user_id === userId);
-  console.log("✅ filtered entries:", filtered);
 
   return filtered.map((entry) => entry.date);
 }
@@ -103,7 +99,6 @@ export async function updateSummary(id, updatedData) {
     .from("summaries")
     .update(updatedData)
     .eq("id", id);
-  console.log("✅ update result:", data, error);
 
   if (error) {
     console.error("❌ 수정 오류:", error);
