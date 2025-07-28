@@ -5,6 +5,9 @@
   "display": "standalone",
   "background_color": "#A1D6B2",
   "theme_color": "#A1D6B2",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "ko",
   "icons": [
     {
       "src": "/logo192.png",
