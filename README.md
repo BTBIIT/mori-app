@@ -22,6 +22,7 @@ React + Tailwind + Supabase + OpenAI 기반으로 개발되었으며, 설치형 
 🔗 [Mori 개발 일지 15일차](https://code-palette.tistory.com/43) <br/>
 🔗 [Mori 개발 일지 16일차](https://code-palette.tistory.com/44) <br/>
 🔗 [Mori 개발 일지 17일차](https://code-palette.tistory.com/45) <br/>
+🔗 [Mori 개발 일지 마무리](https://code-palette.tistory.com/46) <br/>
 
 ---
 
@@ -35,7 +36,7 @@ React + Tailwind + Supabase + OpenAI 기반으로 개발되었으며, 설치형 
 
 ---
 
-## 📁 폴더 구조 (2025-07-15 기준)
+## 📁 폴더 구조 (2025-07-28 기준)
 
 ```
 src/
@@ -60,7 +61,6 @@ src/
 │   ├── Login.jsx               # 최초 로그인 및 소셜 연동 페이지
 │   ├── ResultDaily.jsx         # 일간 결과 화면, 감정 + 피드백 + 행동 추천 포함
 │   ├── ResultMonthly.jsx       # 월간 결과 화면, 전체 일기 기반 감정 분석 및 행동 추천
-│   ├── TestLoading.jsx         # 로딩 도넛 단독 테스트용 임시 페이지
 │   └── WriteWelcome.jsx        # 일기 유도/리스트/작성 화면 (기존 Chat.jsx 대체)
 ├── App.jsx                     # 전체 앱의 루트 컴포넌트
 ├── AppRoutes.jsx               # 라우트 분기 및 보호 처리 컴포넌트
@@ -94,4 +94,4 @@ src/
 | Day 19 | 7/22 (화) | 7/22 (화) | - DiaryWrite / ResultDaily UI / WriteWelcom 리팩토링 Day 2                                                                          | ✅ 완료 |
 | Day 20 | 7/23 (수) | 7/23 (수) | - CalendarView, ResultMonthly, Login 등 전체 레이아웃 통일<br>- 홈 버튼 연결                                                        | ✅ 완료 |
 | Day 21 | 7/24 (목) | 7/25 (금) | - UI 전수 QA (모바일/데스크탑 대응)<br>-오류 해결(ResultMonthly Emotion Graph)                                                      | ✅ 완료 |
-| Day 22 | 7/25 (금) | 예정      | - ✅ 최종 Vercel 배포<br>- README 최종 정리<br>- 기술 블로그 작성 마무리<br>- console.log 제거                                      | ⏳ 예정 |
+| Day 22 | 7/25 (금) | 7/28 (월) | - ✅ 최종 Vercel 배포<br>- README 최종 정리<br>- 기술 블로그 작성 마무리<br>- console.log 제거                                      | ✅ 완료 |
