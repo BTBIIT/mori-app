@@ -1,10 +1,16 @@
+// src/main.jsx
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom"; // ✅ 추가
 import App from "./App.jsx";
-import "./index.css"; // 이 줄이 꼭 있어야 함
+import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      {" "}
+      {/* ✅ 라우터로 감싸기 */}
+      <App />
+    </BrowserRouter>
   </React.StrictMode>
 );
